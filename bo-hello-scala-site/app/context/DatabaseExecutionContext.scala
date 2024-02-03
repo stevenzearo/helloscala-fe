@@ -1,4 +1,4 @@
-package com.helloscala.bo.context
+package context
 
 import org.apache.pekko.actor.ActorSystem
 

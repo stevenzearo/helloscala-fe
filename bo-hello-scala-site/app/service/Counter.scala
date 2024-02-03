@@ -1,4 +1,4 @@
-package com.helloscala.bo.service
+package service
 
 import java.util.concurrent.atomic.AtomicInteger
 

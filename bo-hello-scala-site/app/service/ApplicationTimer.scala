@@ -1,4 +1,4 @@
-package com.helloscala.bo.service
+package service
 
 import play.api.inject.ApplicationLifecycle
 

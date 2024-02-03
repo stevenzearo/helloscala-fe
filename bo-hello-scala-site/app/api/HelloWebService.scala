@@ -1,6 +1,6 @@
-package com.helloscala.bo.api
+package api
 
-import com.helloscala.app.context.ServiceExecutionContext
+import context.ServiceExecutionContext
 import play.api.mvc.{ControllerComponents, Result, Results}
 import play.mvc.Controller
 

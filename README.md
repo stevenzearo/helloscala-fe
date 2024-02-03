@@ -25,3 +25,9 @@ The stake of scala we are using as bellow:
 1. Open project with IntelliJ IDEA, and import as sbt project, add play framework support.
 2. Run `sbt bgRun`
 3. Open browser and input http://localhost:9000/
+
+### build project
+Run command
+```sbt
+sbt compile
+```

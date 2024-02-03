@@ -1,12 +1,11 @@
-@import com.helloscala.bo.controller.HomeController
 @import play.twirl.api.TwirlFeatureImports.defining
 @()
   @defining(play.core.PlayVersion.current) { version =>
 <h3>Table of Contents</h3>
 <ul>
-  <li><a href="@index()#Introduction">Welcome</a>
-  <li><a href="@explore()">Play application overview</a>
-  <li><a href="@tutorial()">Implementing Hello World</a>
+  <li><a href="@routes.HomeController.index()#Introduction">Welcome</a>
+  <li><a href="@routes.HomeController.explore()">Play application overview</a>
+  <li><a href="@routes.HomeController.tutorial()">Implementing Hello World</a>
 </ul>
 <h3>Related Resources</h3>
 <ul>

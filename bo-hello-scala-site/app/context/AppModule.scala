@@ -1,6 +1,7 @@
-package com.helloscala.bo.context
+package context
 
-import com.helloscala.bo.service.{ApplicationTimer, AtomicCounter, Counter}
+import com.google.inject.AbstractModule
+import service.{ApplicationTimer, AtomicCounter, Counter}
 
 import java.time.Clock
 

@@ -31,3 +31,10 @@ Run command
 ```sbt
 sbt compile
 ```
+
+### deploy project
+ref: https://www.playframework.com/documentation/3.0.x/Deploying  
+```sbt
+dist
+```
+after running cmd `sbt dist` project binary file should be located at ${sub project}/universal/

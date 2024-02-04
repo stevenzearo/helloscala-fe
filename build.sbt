@@ -1,4 +1,3 @@
-
 lazy val helloScalaSite = (project in file("hello-scala-site"))
   .enablePlugins(PlayScala)
   .enablePlugins(SbtTwirl)

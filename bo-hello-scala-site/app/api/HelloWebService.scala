@@ -1,14 +1,13 @@
 package api
 
 import context.ServiceExecutionContext
-import play.api.mvc.{ControllerComponents, Result, Results}
-import play.mvc.Controller
+import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Result, Results}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HelloWebService @Inject()(protected val cc: ControllerComponents, implicit val ec: ServiceExecutionContext) extends Controller {
-  def get(): Result = {
-    Results.Ok("Hello, Scala!")
+class HelloWebService @Inject()(protected val cc: ControllerComponents, implicit val ec: ServiceExecutionContext) extends AbstractController(cc) {
+  def get(): Action[AnyContent] = Action(parse.json){
+    Ok("Hello, Scala!")
   }
 }

@@ -6,6 +6,7 @@
 GET     /                                   controllers.HomePageController.index()
 GET     /explore                            controllers.HomePageController.explore()
 GET     /tutorial                           controllers.HomePageController.tutorial()
+GET     /hello                              api.HelloWebService.get()
 
 
 # Map static resources from the /public folder to the /assets URL path

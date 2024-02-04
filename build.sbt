@@ -1,3 +1,13 @@
+ThisBuild / assemblyMergeStrategy := {
+  //  case PathList("javax", "servlet", xs @ _*)         => MergeStrategy.first
+    case PathList(ps @ _*) if ps.last endsWith ".class" => MergeStrategy.first
+    case PathList(ps @ _*) if ps.last endsWith ".conf" => MergeStrategy.concat
+//  case "application.conf"                            => MergeStrategy.concat
+  //  case "unwanted.txt"                                => MergeStrategy.discard
+    case x =>
+      val oldStrategy = (ThisBuild / assemblyMergeStrategy).value
+      oldStrategy(x)
+}
 
 lazy val helloScalaSite = (project in file("hello-scala-site"))
   .enablePlugins(PlayScala)

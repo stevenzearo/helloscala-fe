@@ -2,11 +2,11 @@ import {defineComponent} from "vue"
 
 export default defineComponent({
     props: {
-        message: String
+        msg: String
     },
     setup(props) {
         return {
-            message: props.message
+            msg: props.msg
         }
     }
 })

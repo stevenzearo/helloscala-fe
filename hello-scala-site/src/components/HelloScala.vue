@@ -4,7 +4,7 @@ const start = Date.parse("2024-01-28T06:00:00.000Z");
 export default {
   data() {
     return {
-      "siteTimerTip": "This site is running!",
+      siteTimerTip: "This site is running!",
     }
   },
   created() {
@@ -51,5 +51,7 @@ export default {
   </div>
 </template>
 <style scoped>
-
+.container {
+  height: fit-content;
+}
 </style>

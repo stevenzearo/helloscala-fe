@@ -1,6 +1,12 @@
-<script setup lang="ts">
+<script>
 import HelloScala from "@/components/HelloScala.vue";
 import NavigationHeader from "@/components/NavigationHeader.vue";
+
+export default {
+  components: {
+    HelloScala, NavigationHeader
+  }
+}
 </script>
 
 <template>

@@ -1,8 +1,11 @@
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   data() {
     return {
       test: "this is navigation header",
+      timer: 0,
     }
   },
   created() {
@@ -17,7 +20,7 @@ export default {
     updateDuration() {
     }
   }
-}
+})
 
 </script>
 

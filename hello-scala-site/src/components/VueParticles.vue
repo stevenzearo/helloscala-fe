@@ -4,8 +4,8 @@
 
 <template>
   <vue-particles
-      id="tsparticles"
-      :options="{
+    id="tsparticles"
+    :options="{
 
                     fpsLimit: 120,
                     interactivity: {
@@ -16,37 +16,37 @@
                             },
                             onHover: {
                                 enable: true,
-                                mode: 'attract'
+                                mode: ['attract', 'grab', 'repulse']
                             },
                             resize: true
                         },
                         modes: {
                             bubble: {
-                                distance: 400,
+                                distance: 200,
                                 duration: 2,
-                                opacity: 0.8,
+                                opacity: 0.6,
                                 size: 40
                             },
                             push: {
-                                quantity: 4
+                                quantity: 2
                             },
                             repulse: {
-                                distance: 200,
-                                duration: 0.4
+                                distance: 120,
+                                duration: 2
                             },
                             grab: {
-                              distance: 50,
+                              distance: 150,
                               lineLinked: {
-                                opacity: 0.5
+                                opacity: 0.6
                               }
                             },
                             attract: {
                               distance: 200,
-                              duration: 0.5,
-                              // easing: 'ease-out-quad',
+                              duration: 2,
+                              easing: 'ease-out-quad',
                               factor: 1,
                               maxSpeed: 10,
-                              speed: 1
+                              speed: 1,
                             }
                         }
                     },
@@ -56,19 +56,22 @@
                         },
                         links: {
                             color: '#000000',
-                            distance: 150,
+                            distance: 120,
                             enable: true,
-                            opacity: 0.5,
+                            opacity: 0.6,
                             width: 1
                         },
                         move: {
-                            direction: 'none',
                             enable: true,
-                            outModes: 'out',
                             random: true,
-                            speed: 4,
+                            direction: 'none',
+                            outModes: 'out',
+                            speed: {value: {min: 1, max: 3}},
                             straight: false,
                             bounce: true,
+                            attract: {
+                              enable: true
+                            }
 
                         },
                         number: {
@@ -78,13 +81,13 @@
                             value: 80
                         },
                         opacity: {
-                            value: 0.5
+                            value: 0.6
                         },
                         shape: {
                             type: 'circle'
                         },
                         size: {
-                            value: { min: 1, max: 5 }
+                            value: { min: 1, max: 3 }
                         }
                     },
                     detectRetina: true

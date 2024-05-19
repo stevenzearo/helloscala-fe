@@ -130,7 +130,7 @@ onMounted(() => {
   //margin-bottom: 0;
   .banner-background {
     position: relative;
-    background: url('http://127.0.0.1:8444/helloscala/asserts/20240505/message_bg.jpg') center center no-repeat;
+    background: url('https://helloscala.cpolar.top/helloscala/asserts/20240505/message_bg.jpg') center center no-repeat;
     background-attachment: fixed;
     background-size: cover;
     width: 100%;

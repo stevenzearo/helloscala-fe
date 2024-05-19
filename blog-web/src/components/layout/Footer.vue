@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <div class="site-girl">
+<!--      <div class="site-girl">
         <div class="girl">
           <i class="thumb"></i>
         </div>
@@ -38,7 +38,7 @@
           <h4>绿水本无忧，因风皱面</h4>
           <h4>青山原不老，为雪白头</h4>
         </div>
-      </div>
+      </div>-->
 
       <div class="site-fav">
         <a class="btn-orange hand-style">Ctrl+D收藏本站</a>
@@ -93,7 +93,8 @@ watch(
 var timer = setInterval(runTime, 1000);
 
 function runTime() {
-  var timeold = new Date().getTime() - new Date(1627747200000).getTime();
+  let start = Date.parse("2024-01-28T06:00:00.000Z");
+  var timeold = new Date().getTime() - start;
   var msPerDay = 24 * 60 * 60 * 1000;
   var daysold = Math.floor(timeold / msPerDay);
   var time = new Date();
@@ -211,7 +212,7 @@ function runTime() {
       .thumb {
         display: block;
         padding-top: 60%;
-        background-image: url(http://127.0.0.1:8444/helloscala/asserts/20240505/cyxy.png);
+        background-image: url(https://helloscala.cpolar.top/helloscala/asserts/20240505/cyxy.png);
       }
       .girl-info {
         color: var(--theme-color);

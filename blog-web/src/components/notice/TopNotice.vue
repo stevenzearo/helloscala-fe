@@ -1,7 +1,7 @@
 <!-- 公告栏组件 -->
 <template>
   <div class="message" ref="msgBox" id="message" v-if="showNotice">
-    <marquee
+<!--    <marquee
       behavior="scroll"
       direction="left"
       ref="noticeRef"
@@ -19,7 +19,7 @@
           关闭 <el-icon><CloseBold /></el-icon>
         </span>
       </span>
-    </marquee>
+    </marquee>-->
   </div>
 </template>
 

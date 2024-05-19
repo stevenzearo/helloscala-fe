@@ -500,7 +500,7 @@ function openAuthLogin(source) {
 
 <style lang="scss" scoped>
 ::v-deep(.el-overlay-dialog) {
-  background-image: url(http://127.0.0.1:8444/helloscala/asserts/20240505/20231007_1696659441438.jpg) !important;
+  background-image: url(https://helloscala.cpolar.top/helloscala/asserts/20240505/20231007_1696659441438.jpg) !important;
 }
 @media screen and (min-width: 1119px) {
   ::v-deep(.el-dialog) {

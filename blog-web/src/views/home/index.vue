@@ -27,7 +27,7 @@
 
       <el-drawer title="我是标题" v-model="drawer" :with-header="false">
         <div class="video-container">
-          <video style="width: 100%" controls autoplay :src="videoSrc"></video>
+<!--          <video style="width: 100%" controls autoplay :src="videoSrc"></video>-->
         </div>
         <div style="margin-left: 20px; margin-top: 10px">
           <el-button
@@ -254,7 +254,7 @@
         </div>
         <!-- 右侧内容 -->
         <div class="rightBox">
-          <el-card
+<!--          <el-card
             class="box-card"
             style="perspective: 1000px; position: relative; height: 120px"
           >
@@ -277,7 +277,7 @@
                 alt=""
               />
             </div>
-          </el-card>
+          </el-card>-->
           <!-- 推荐文章 -->
           <el-card class="box-card recomArticle" v-if="newArticleList.length">
             <div class="clearfix">
@@ -448,12 +448,12 @@
           </el-card>
 
           <!-- 天气组件 -->
-          <el-card class="box-card weather">
+<!--          <el-card class="box-card weather">
             <div class="clearfix">
               <span class="card-title"> 今日天气</span>
             </div>
             <div id="he-plugin-standard"></div>
-          </el-card>
+          </el-card>-->
         </div>
       </div>
     </div>
@@ -478,7 +478,7 @@ const siteStore = useSiteStore();
 const webInfo = ref(siteStore.getWebInfo);
 const centerDialogVisible = ref(false);
 const drawer = ref(false);
-const videoSrc = ref("http://api.yujn.cn/api/zzxjj.php");
+// const videoSrc = ref("http://api.yujn.cn/api/zzxjj.php");
 const pageData = ref({
   pageNo: 1,
   pageSize: 10,

@@ -65,9 +65,9 @@ app.use(VueViewer);
 app.use(VueLazyLoad, {
   preLoad: 1,
   // 懒加载默认加载图片
-  loading: 'http://127.0.0.1:8444/helloscala/asserts/20240505/20240123_1705973123698.gif',
+  loading: 'https://helloscala.cpolar.top/helloscala/asserts/20240505/20240123_1705973123698.gif',
   // 加载失败后加载的图片
-  error: 'http://127.0.0.1:8444/helloscala/asserts/20240505/20240123_1705973581037.png',
+  error: 'https://helloscala.cpolar.top/helloscala/asserts/20240505/20240123_1705973581037.png',
   attempt: 1
 })
 

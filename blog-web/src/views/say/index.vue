@@ -3,7 +3,7 @@
     <div class="say-containner">
       <div class="cover">
         <img
-          src="http://127.0.0.1:8444/helloscala/asserts/20240505/message_bg.jpg"
+          src="https://helloscala.cpolar.top/helloscala/asserts/20240505/message_bg.jpg"
           alt=""
         />
         <div class="info">说说</div>

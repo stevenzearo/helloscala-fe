@@ -970,7 +970,7 @@ init();
     }
 
     .itemBox {
-        background-image: url("http://127.0.0.1:8444/helloscala/asserts/20240505/imbg.png");
+        background-image: url("https://helloscala.cpolar.top/helloscala/asserts/20240505/imbg.png");
       background-color: #323644;
       width: 100%;
       box-shadow: none;

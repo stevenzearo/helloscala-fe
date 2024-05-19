@@ -482,7 +482,7 @@ function splitIpAddress(address) {
             width: 100%;
             border-radius: 4px;
             border-style: none;
-            background: url("http://127.0.0.1:8444/helloscala/asserts/20240505/plun.gif") 100% 100%
+            background: url("https://helloscala.cpolar.top/helloscala/asserts/20240505/plun.gif") 100% 100%
               no-repeat;
             transition: all 0.25s ease-in-out 0s;
 

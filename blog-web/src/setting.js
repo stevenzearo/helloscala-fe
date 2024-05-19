@@ -38,18 +38,17 @@ export default {
     /**
     * 游客头像
     */
-    touristAvatar: "http://127.0.0.1:8444/helloscala/asserts/kaixin.png",
+    touristAvatar: "https://helloscala.cpolar.top/helloscala/asserts/20240505/kaixin.png",
 
 
     /**
     * 头像挂件
     */
-    avatarGaoda: "http://127.0.0.1:8444/helloscala/asserts/20240505/guajian_3.png",
+    avatarGaoda: "https://helloscala.cpolar.top/helloscala/asserts/20240505/guajian_3.png",
 
 
     /**
     * 博主信息组件背景(即轮播图右侧)
     */
-    avatarBg: "http://127.0.0.1:8444/helloscala/asserts/20240505/avatar_bg.jpg",
-
+    avatarBg: "https://helloscala.cpolar.top/helloscala/asserts/20240505/avatar_bg.jpg",
 }

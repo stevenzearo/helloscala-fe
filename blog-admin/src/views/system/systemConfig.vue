@@ -309,7 +309,7 @@ const areaDictList = ref([
 ]);
 const yesNoDictList = ref([]);
 const openDictList = ref([]);
-const fileUploadList = ref(["本地", "七牛云"]);
+const fileUploadList = ref(["本地", "七牛云", "阿里云", "FTP"]);
 const searchModelDictList = ref([]);
 const openDictDefaultValue = ref(null);
 const rules = ref({

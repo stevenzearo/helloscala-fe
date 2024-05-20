@@ -1,6 +1,7 @@
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { UserConfig, ConfigEnv, loadEnv, defineConfig } from "vite";
+import compression from 'vite-plugin-compression';
 
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
@@ -118,6 +119,18 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         iconDirs: [resolve(pathSrc, "assets/icons")],
         // 指定symbolId格式
         symbolId: "icon-[dir]-[name]",
+      }),
+      compression({
+        verbose: true, // 是否在控制台输出压缩结果
+        disable: false, // 是否禁用 gzip 压缩
+        threshold: 10240, // 压缩文件的大小阈值（以字节为单位）
+        algorithm: 'gzip', // 压缩算法
+        ext: '.gz', // 压缩文件的后缀名
+        deleteOriginFile: false, // 是否删除原文件
+        // 需要压缩的文件类型
+        filter: (filename) => {
+          return /(\.js$|\.css$|\.html$|\.json$)/.test(filename);
+        },
       }),
     ],
     // 预加载项目必需的组件

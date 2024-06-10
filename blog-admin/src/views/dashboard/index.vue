@@ -125,7 +125,7 @@
         <div id="access" class="chart" style="height: 350px; width: 100%" />
       </el-card>
     </el-row>
-
+<!--
     <el-dialog
       title="通知"
       :close-on-click-modal="false"
@@ -133,7 +133,7 @@
       center
     >
       <span v-html="dashboard"></span>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 

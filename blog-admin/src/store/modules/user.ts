@@ -25,7 +25,7 @@ export const useUserStore = defineStore("user", () => {
       loginApi(loginData)
         .then((response) => {
           const { data } = response;
-          localStorage.setItem("accessToken", data);
+          localStorage.setItem("accessToken", "Bearer " + data);
           resolve();
         })
         .catch((error) => {

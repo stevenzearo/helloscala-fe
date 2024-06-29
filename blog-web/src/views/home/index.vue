@@ -601,7 +601,7 @@ function handleClike(id, path) {
 }
 //初始化天气
 function insertWeather() {
-  window.WIDGET = {
+  /*window.WIDGET = {
     CONFIG: {
       layout: "2",
       width: 230,
@@ -615,7 +615,7 @@ function insertWeather() {
   const script = document.createElement("script");
   script.src =
     "https://widget.qweather.net/standard/static/js/he-standard-common.js?v=2.0";
-  document.body.appendChild(script);
+  document.body.appendChild(script);*/
 }
 
 //说说列表

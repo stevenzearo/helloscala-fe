@@ -478,7 +478,7 @@ function openDrawer() {
     line-height: 60px;
     z-index: 99;
     //background-color: var(--header-back-color);
-    background: linear-gradient(to bottom, #f44336 20%, #1a237e 80%);
+    background: linear-gradient(to bottom, #e6ee9c 20%, #ffcc80 80%);
 
     a {
       text-decoration: none;

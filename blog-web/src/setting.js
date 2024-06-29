@@ -34,7 +34,6 @@ export default {
     */
     messageBkImg: "",
 
-
     /**
     * 游客头像
     */

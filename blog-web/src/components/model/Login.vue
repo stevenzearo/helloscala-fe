@@ -273,7 +273,7 @@
 
       <div v-if="index == 4">
 <!--        todo wechat qr code-->
-        <el-image class="wxImg" src="">
+        <el-image class="wxImg" src="https://helloscala.cpolar.top/helloscala/asserts/20240629/frenzied_java_land.jpg">
           <template #placeholder>
             <div class="image-slot">加载中<span class="dot">...</span></div>
           </template>

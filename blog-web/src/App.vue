@@ -29,11 +29,19 @@ import { useSiteStore } from '@/store/moudel/site.js'
 import { getToken, setToken } from '@/utils/cookie.js'
 import { useUserStore } from '@/store/moudel/user.js'
 import SelfVueParticles from './components/SelfVueParticles.vue'
+import router from "@/router";
 
 const { proxy } = getCurrentInstance()
 const siteStore = useSiteStore()
 const userStore = useUserStore()
 onMounted(() => {
+  const redirect = sessionStorage.getItem('redirect')
+  if (redirect) {
+    console.log("redirect:" + redirect)
+    sessionStorage.removeItem('redirect')
+    router.push(redirect)
+  }
+
   let theme = sessionStorage.getItem('theme')
   if (theme == null) {
     theme = 'light'

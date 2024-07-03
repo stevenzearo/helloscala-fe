@@ -27,7 +27,6 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: any) => {
-    console.log(JSON.stringify(response))
     const { code, statusCode, message } = response.data;
     if (code == 200 || code == 201 || statusCode == 200 || statusCode == 201) {
       return response.data;

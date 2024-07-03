@@ -123,8 +123,8 @@ function handleLogout() {
       location.reload();
       proxy.$modal.msgSuccess("注销成功");
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
     });
 }
 </script>

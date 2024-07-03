@@ -475,6 +475,8 @@ function login() {
         userStore.setUserInfo(res.data);
         close();
         location.reload();
+      }).catch(error => {
+        proxy.$modal.msgError(error.response.data.msg);
       });
     } else {
       console.log("error submit!!");

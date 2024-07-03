@@ -92,7 +92,8 @@ function addToList() {
       barrageList.value.push(message)
       proxy.$modal.msgSuccess('留言成功')
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
     })
   const TIME_COUNT = 30
   if (!timer.value) {

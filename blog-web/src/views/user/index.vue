@@ -401,7 +401,7 @@ const feedbackFormRef = ref();
 
 //获取用户的文章、粉丝等数据
 function getCount() {
-  getUserCount().then((res) => {
+  getUserCount(user.value.id).then((res) => {
     let obj = {
       article: res.extra.articleCount,
       collect: res.extra.collectCount,
@@ -499,7 +499,8 @@ function handleCanCollect(index, id) {
         proxy.$modal.msgSuccess("取消成功");
       });
     })
-    .catch((_) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       proxy.$modal.msg("取消操作");
     });
 }
@@ -517,7 +518,8 @@ function handleDeleteArticle(index, id) {
         proxy.$modal.msgSuccess("删除成功");
       });
     })
-    .catch(() => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       proxy.$modal.msg("取消操作");
     });
 }
@@ -561,13 +563,14 @@ function selectAricleList(type) {
   if (type) {
     pageData.value.type = type;
   }
-  getArticleByUserId(pageData.value)
+  getArticleByUserId(user.value.id, pageData.value)
     .then((res) => {
       dataList.value.push(...res.data.records);
       pages.value = res.data.pages;
       closeLoading();
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       closeLoading();
     });
 }
@@ -600,11 +603,13 @@ function uploadBjCoverFile(param) {
           proxy.$modal.msgSuccess("修改成功");
           closeLoading();
         })
-        .catch((err) => {
+        .catch((error) => {
+          proxy.$modal.msgError(error.response.data.msg);
           closeLoading();
         });
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       closeLoading();
     });
 }
@@ -621,7 +626,8 @@ function uploadSectionFile(param) {
       form.value.avatar = res.data;
       closeLoading();
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       closeLoading();
     });
 }

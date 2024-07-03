@@ -430,7 +430,8 @@ function moreComment(val) {
       pages.value = res.data.pages;
       loading.value = false;
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       loading.value = false;
     });
 }

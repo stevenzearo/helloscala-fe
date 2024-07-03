@@ -22,7 +22,7 @@
           <div class="timeline-content">
             <div class="timeline-date hand-style" @click="open(index)">
               <span style="padding-left: 10px">
-                {{ formatTime(item.time) }}
+                {{ formatTime(item.month) }}
               </span>
               <span style="float: right; padding-right: 10px">
                 <el-icon>
@@ -36,12 +36,12 @@
             >
               <router-link
                 :to="'/article/' + chriden.id"
-                v-for="chriden in item.list"
+                v-for="chriden in item.articles"
                 :key="chriden.id"
                 class="timeline-title hand-style"
               >
                 <span style="margin-right: 10px"
-                  >{{ chriden.formatTime }} :
+                  >{{ chriden.createMonthlyDate }} :
                 </span>
                 {{ chriden.title }}
               </router-link>
@@ -86,8 +86,9 @@ function open(i) {
 /** 获取所有文章  */
 function getArchiveArticleList() {
   archiveArticle().then((res) => {
-    archiveList.value = res.data;
-    count.value = res.extra.total;
+    console.log(JSON.stringify(res))
+    archiveList.value = res.data.monthlyArticles;
+    count.value = res.data.total;
   }).finally(() => (fullscreenLoading.value = false));
 }
 

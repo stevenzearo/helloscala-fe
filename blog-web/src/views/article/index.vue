@@ -690,7 +690,9 @@ function handleCheckCode() {
       proxy.$modal.msgSuccess("验证成功");
       checkAfter();
     })
-    .catch((err) => {});
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
+    });
 }
 function checkAfter() {
   dialogVisible.value = false;

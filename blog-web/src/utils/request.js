@@ -48,23 +48,25 @@ service.interceptors.response.use(
         const res = response.data
         // if the custom code is not 20000, it is judged as an error.
         const userStore = useUserStore();
-        if (res.code !== 200) {
-            if (res.code == 401) {
-                //removeToken()
-                removeToken()
-                sessionStorage.removeItem("user")
-                userStore.setUserInfo(null)
-                userStore.setLoginFlag(true)
-            }
-            //如果是校验微信登录是否授权的接口 则不进行错误输出
-            if (response.config.url !== "/oauth/wechat/is_login") {
-                ElMessage({ message: res.message, type: 'error' })
-            }
-
-            return Promise.reject(new Error(res.message || 'Error'))
-        } else {
+        if (res.code === 200
+            || res.code === 201
+            || res.statusCode === 200
+            || res.statusCode === 201
+        ) {
             return res
         }
+        if (res.code === 401) {
+            //removeToken()
+            removeToken()
+            sessionStorage.removeItem("user")
+            userStore.setUserInfo(null)
+            userStore.setLoginFlag(true)
+        }
+        //如果是校验微信登录是否授权的接口 则不进行错误输出
+        if (response.config.url !== "/oauth/wechat/is_login") {
+            ElMessage({ message: res.msg, type: 'error' })
+        }
+        return Promise.reject(new Error(res.msg || 'Error'))
     },
     error => {
         return Promise.reject(error)

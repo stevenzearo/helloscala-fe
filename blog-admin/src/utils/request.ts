@@ -27,8 +27,9 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: any) => {
-    const { code, message } = response.data;
-    if (code == 200 || code == 201) {
+    console.log(JSON.stringify(response))
+    const { code, statusCode, message } = response.data;
+    if (code == 200 || code == 201 || statusCode == 200 || statusCode == 201) {
       return response.data;
     }
     // 响应数据为二进制流处理(Excel导出)

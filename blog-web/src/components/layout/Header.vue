@@ -427,8 +427,8 @@ function handleLogout() {
       location.reload();
       userStore.setUserInfo(null);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
     });
   //如果在个人中心则跳回上一页
   if (path.value === "/user") {

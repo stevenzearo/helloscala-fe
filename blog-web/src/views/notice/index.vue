@@ -208,10 +208,12 @@ function clearMessage(id, index) {
           }
           proxy.$modal.msgSuccess("删除成功");
         })
-        .catch((err) => {});
+        .catch((error) => {
+          proxy.$modal.msgError(error.response.data.msg);
+        });
     })
-    .catch(() => {
-      proxy.$modal.msg("Delete canceled");
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
     });
 }
 function handleArticleClick(id) {
@@ -230,7 +232,8 @@ function getList() {
       pages.value = res.data.pages;
       loading.value = false;
     })
-    .catch((err) => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       loading.value = false;
     });
 }

@@ -388,7 +388,8 @@ function closeRoom(id, index) {
         proxy.$modal.msgSuccess("删除成功");
       });
     })
-    .catch(() => {
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
       proxy.$modal.msg("取消");
     });
 }
@@ -431,7 +432,9 @@ function uploadSectionFile(param) {
       doSend(content, 2);
       imgDialogVisible.value = false;
     })
-    .catch((err) => {});
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
+    });
 }
 //截取地址
 function splitIpAddress(address) {

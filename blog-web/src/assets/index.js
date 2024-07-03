@@ -90,7 +90,7 @@ var content = `
 站点介绍：
 1. Scala编程技术分享.
 🏠官网:  ${offiUrl}
-📞QQ/VX: 1248954763
+📞VX: FrenziedJavaLand
 `
 console.log(`%c${title1}
 %c${content}`, styleTitle1, styleContent)

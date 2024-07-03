@@ -188,7 +188,6 @@ import {
   updateArticle,
   getMyArticleInfo,
   listTagAll,
-  readMarkdownFile,
 } from "@/api";
 
 let { proxy } = getCurrentInstance();
@@ -260,8 +259,8 @@ function imgAdd(pos, $file) {
     .then((res) => {
       md.value.$img2Url(pos, res.data);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
     });
 }
 //删除图片
@@ -307,16 +306,15 @@ function doReadMarkdownFile(param) {
     proxy.$modal.msgError("只能上传md后缀的文件");
     return false;
   }
-  files.value = param.file;
-  // FormData 对象
-  var formData = new FormData();
-  // 文件对象
-  formData.append("file", files.value);
-  readMarkdownFile(formData)
-    .then((res) => {
-      article.value.contentMd = res.data.content;
-      article.value.title = res.data.fileName;
-    }).finally(() => (fullscreenLoading.value = false));
+  const reader = new FileReader();
+  article.value.title = param.file.name.split(".")[0];
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const decoder = new TextDecoder('utf-8');
+    article.value.contentMd = decoder.decode(arrayBuffer);
+  }
+  reader.readAsArrayBuffer(param.file)
+  fullscreenLoading.value = false;
 }
 
 //编辑器插入视频

@@ -2,21 +2,25 @@ import request from '@/utils/request'
 
 export function listArticle(params) {
     return request({
-        url: '/v1/article/',
+        url: '/article/',
         method: 'get',
         params: params
     })
 }
-export function getArticleByUserId(params) {
+export function getArticleByUserId(userId, params) {
     return request({
-        url: '/v1/article/selectArticleByUserId',
+        url: '/article/listByUserId',
         method: 'get',
-        params: params
+        params: {
+            userId: userId,
+            pageNo: params.pageNo,
+            pageSize: params.pageSize
+        }
     })
 }
 export function deleteMyArticle(id) {
     return request({
-        url: '/v1/article/',
+        url: '/article/',
         method: 'delete',
         params: {
             id: id
@@ -25,37 +29,30 @@ export function deleteMyArticle(id) {
 }
 export function getMyArticleInfo(id) {
     return request({
-        url: '/v1/article/selectMyArticleInfo',
+        url: '/article/selectMyArticleInfo',
         method: 'get',
         params: {
             id: id
         }
     })
 }
-export function readMarkdownFile(data) {
-    return request({
-        url: '/v1/article/readMarkdownFile',
-        method: 'post',
-        data
-    })
-}
 export function insertArticle(data) {
     return request({
-        url: '/v1/article/',
+        url: '/article/',
         method: 'post',
         data
     })
 }
 export function updateArticle(data) {
     return request({
-        url: '/v1/article/',
+        url: '/article/',
         method: 'put',
         data
     })
 }
 export function searchArticle(params) {
     return request({
-        url: '/v1/article/search',
+        url: '/article/search',
         method: 'get',
         params: params
     })
@@ -63,14 +60,14 @@ export function searchArticle(params) {
 
 export function articleInfo(id) {
     return request({
-        url: '/v1/article/info/' + id,
+        url: '/article/info/' + id,
         method: 'get',
     })
 }
 
 export function checkCode(data) {
     return request({
-        url: '/v1/article/checkCode',
+        url: '/article/checkCode',
         method: 'get',
         params: {
             code: data
@@ -79,7 +76,7 @@ export function checkCode(data) {
 }
 export function articleLike(id) {
     return request({
-        url: '/v1/article/like',
+        url: '/article/like',
         method: 'get',
         params: {
             articleId: id
@@ -88,7 +85,7 @@ export function articleLike(id) {
 }
 export function archiveArticle() {
     return request({
-        url: '/v1/article/archive',
+        url: '/article/archive',
         method: 'get',
     })
 }

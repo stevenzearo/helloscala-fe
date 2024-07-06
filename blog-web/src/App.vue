@@ -24,9 +24,9 @@ import Login from '@/components/model/Login.vue'
 import Search from '@/components/model/Search.vue'
 import Notice from '@/components/notice/TopNotice.vue'
 
-import { getWebSiteInfo, report, selectUserInfoByToken } from '@/api/index'
+import { getWebSiteInfo, report, getCurrentUser } from '@/api/index'
 import { useSiteStore } from '@/store/moudel/site.js'
-import { getToken, setToken } from '@/utils/cookie.js'
+import {getToken, removeToken, setToken} from '@/utils/cookie.js'
 import { useUserStore } from '@/store/moudel/user.js'
 import SelfVueParticles from './components/SelfVueParticles.vue'
 import router from "@/router";
@@ -75,16 +75,16 @@ function handleReport() {
 
 function initWebSiteInfo() {
   getWebSiteInfo().then((res) => {
-    siteStore.setWebInfo(res.data)
-    siteStore.setSiteAccess(res.extra.siteAccess)
-    siteStore.setVsitorAccess(res.extra.visitorAccess)
+    siteStore.setWebInfo(res.data.config)
+    siteStore.setSiteAccess(res.data.blogViewCount)
+    siteStore.setVsitorAccess(res.data.visitorCount)
   })
 }
 
-function getUserInfo() {
+function setUserInfo() {
   userStore.setLoginFlag(false)
 
-  let flag = window.location.href.indexOf('token') != -1
+  let flag = window.location.href.indexOf('token') !== -1
   if (flag) {
     let token = window.location.href.split('token=')[1]
     setToken(token)
@@ -93,15 +93,24 @@ function getUserInfo() {
   // 从cookie中获取token
   let token = getToken()
   if (token != null) {
-    selectUserInfoByToken(token).then((res) => {
+    getCurrentUser().then((res) => {
       userStore.setUserInfo(res.data)
+    }).catch((error) => {
+      if (error.response.data.statusCode === 403) {
+        proxy.$modal.msgError('登录信息失效，请重新登录！')
+        removeToken();
+        userStore.setUserInfo(null);
+        router.push("/")
+      } else {
+        proxy.$modal.msgError(error.response.data.msg);
+      }
     })
   }
 }
 
 handleReport()
 initWebSiteInfo()
-getUserInfo()
+setUserInfo()
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <div class="user-warpper">
       <div class="userBox">
         <div class="backgroupImg">
-          <img v-lazy="user.bjCover" :key="user.bjCover" />
+          <img v-lazy="user.bjCover" :key="user.bjCover"/>
 
           <el-row class="top-btn">
             <el-col :span="6">
@@ -44,44 +44,50 @@
             <div class="menu">
               <ul>
                 <li @click="handleUpdateInfoBefor">
-                  <svg-icon name="edit"></svg-icon> 修改资料
+                  <svg-icon name="edit"></svg-icon>
+                  修改资料
                 </li>
                 <li @click="loadMoreData">
-                  <svg-icon name="xiangqing"></svg-icon> 更多资料
+                  <svg-icon name="xiangqing"></svg-icon>
+                  更多资料
                 </li>
                 <li>
                   <el-upload
-                    class="avatar-uploader"
-                    :show-file-list="false"
-                    name="filedatas"
-                    :action="uploadPictureHost"
-                    :http-request="uploadBjCoverFile"
-                    :before-upload="openLoading"
-                    multiple
+                      class="avatar-uploader"
+                      :show-file-list="false"
+                      name="filedatas"
+                      :action="uploadPictureHost"
+                      :http-request="uploadBjCoverFile"
+                      :before-upload="openLoading"
+                      multiple
                   >
-                    <svg-icon name="photo"></svg-icon> 修改封面
+                    <svg-icon name="photo"></svg-icon>
+                    修改封面
                   </el-upload>
                 </li>
                 <li @click="feedbackDialogTableVisible = true">
-                  <svg-icon name="feedback"></svg-icon> 添加反馈
+                  <svg-icon name="feedback"></svg-icon>
+                  添加反馈
                 </li>
               </ul>
             </div>
-            <el-icon><More /></el-icon>
+            <el-icon>
+              <More/>
+            </el-icon>
           </div>
         </div>
         <div class="user-item sy-display-flex-center">
           <div class="toolbar">
-            <img class="cover" :src="user.avatar" alt="" />
+            <img class="cover" :src="user.avatar" alt=""/>
           </div>
           <div class="userInfo">
             <div class="nickname">
               昵称：<span>{{ user.nickname }}</span>
               <el-tooltip
-                class="item"
-                effect="dark"
-                content="LV1"
-                placement="top"
+                  class="item"
+                  effect="dark"
+                  content="LV1"
+                  placement="top"
               >
                 <span>
                   <svg-icon name="level1"></svg-icon>
@@ -96,13 +102,13 @@
           </div>
           <div class="sign">
             <button
-              :class="
+                :class="
                 !isTodaySign
                   ? 'signBtn hand-style'
                   : 'disabledSignBtn hand-style'
               "
-              :disabled="isTodaySign"
-              @click="handleSign"
+                :disabled="isTodaySign"
+                @click="handleSign"
             >
               <svg-icon name="sign1"></svg-icon>
               <span>{{ isTodaySign ? "今天已签到" : "立即签到" }}</span>
@@ -114,15 +120,15 @@
         <div class="title">
           <ul>
             <li
-              ref="btnRef"
-              :class="index == 0 ? 'active hand-style' : 'hand-style '"
-              @click="switchTab(index)"
-              v-for="(item, index) in btnList"
-              :key="index"
+                ref="btnRef"
+                :class="index == 0 ? 'active hand-style' : 'hand-style '"
+                @click="switchTab(index)"
+                v-for="(item, index) in btnList"
+                :key="index"
             >
               <span class="item-title sy-display-flex-center">
                 <el-icon style="margin-right: 3px">
-                  <component :is="item.icon" />
+                  <component :is="item.icon"/>
                 </el-icon>
                 {{ item.name }}
               </span>
@@ -133,15 +139,15 @@
         <div class="articleBox" v-if="dataList.length">
           <div class="articleItem">
             <div
-              class="article"
-              @mouseleave="item.showOpeBotton = false"
-              @mouseenter="item.showOpeBotton = true"
-              v-for="(item, index) in dataList"
-              :key="index"
+                class="article"
+                @mouseleave="item.showOpeBotton = false"
+                @mouseenter="item.showOpeBotton = true"
+                v-for="(item, index) in dataList"
+                :key="index"
             >
               <router-link :to="'/article/' + item.id">
                 <div class="article-cover hand-style">
-                  <img v-lazy="item.avatar" :key="item.avatar" />
+                  <img v-lazy="item.avatar" :key="item.avatar"/>
                 </div>
               </router-link>
 
@@ -167,47 +173,55 @@
                     </span>
 
                     <el-tag
-                      class="hand-style"
-                      @click="handleClike(item.categoryId, '/category')"
+                        class="hand-style"
+                        @click="handleClike(item.categoryId, '/category')"
                     >
-                      <el-icon><FolderOpened /></el-icon>
+                      <el-icon>
+                        <FolderOpened/>
+                      </el-icon>
                       {{ item.categoryName }}
                     </el-tag>
 
                     <el-tag
-                      class="hand-style"
-                      :type="tagStyle[Math.round(Math.random() * 4)]"
-                      @click="handleClike(tag.id, '/tags')"
-                      v-for="(tag, index) in item.tagList"
-                      :key="index"
+                        class="hand-style"
+                        :type="tagStyle[Math.round(Math.random() * 4)]"
+                        @click="handleClike(tag.id, '/tags')"
+                        v-for="(tag, index) in item.tagList"
+                        :key="index"
                     >
-                      <el-icon><CollectionTag /></el-icon>
-                      {{ tag.name }}</el-tag
+                      <el-icon>
+                        <CollectionTag/>
+                      </el-icon>
+                      {{ tag.name }}
+                    </el-tag
                     >
                   </div>
 
                   <div class="opeBotton" v-if="item.showOpeBotton">
                     <div v-if="pageData.index == 0">
                       <el-button
-                        type="primary"
-                        link
-                        @click="handleUpdateArticle(item.id)"
-                        >修改</el-button
+                          type="primary"
+                          link
+                          @click="handleUpdateArticle(item.id)"
+                      >修改
+                      </el-button
                       >
                       <el-button
-                        type="danger"
-                        link
-                        @click="handleDeleteArticle(index, item.id)"
-                        >删除</el-button
+                          type="danger"
+                          link
+                          @click="handleDeleteArticle(index, item.id)"
+                      >删除
+                      </el-button
                       >
                     </div>
 
                     <el-button
-                      v-if="pageData.index == 1"
-                      type="danger"
-                      link
-                      @click="handleCanCollect(index, item.id)"
-                      >取消收藏</el-button
+                        v-if="pageData.index == 1"
+                        type="danger"
+                        link
+                        @click="handleCanCollect(index, item.id)"
+                    >取消收藏
+                    </el-button
                     >
                   </div>
                 </div>
@@ -216,22 +230,22 @@
           </div>
           <!-- 分页按钮 -->
           <sy-pagination
-            :pageNo="pageData.pageNo"
-            :pages="pages"
-            @changePage="handlePage"
+              :pageNo="pageData.pageNo"
+              :pages="pages"
+              @changePage="handlePage"
           />
         </div>
         <div v-else>
-          <sy-empty />
+          <sy-empty/>
         </div>
       </div>
     </div>
     <el-dialog
-      title="个人信息"
-      center
-      v-model="dialogTableVisible"
-      :lock-scroll="false"
-      :close-on-click-modal="false"
+        title="个人信息"
+        center
+        v-model="dialogTableVisible"
+        :lock-scroll="false"
+        :close-on-click-modal="false"
     >
       <div style="">
         <div class="dialogItem item">
@@ -254,25 +268,27 @@
 
     <!-- 修改资料弹出框 -->
     <el-dialog
-      title="修改资料"
-      center
-      v-model="editDialogTableVisible"
-      :lock-scroll="false"
-      :close-on-click-modal="false"
+        title="修改资料"
+        center
+        v-model="editDialogTableVisible"
+        :lock-scroll="false"
+        :close-on-click-modal="false"
     >
       <el-form label-position="left" label-width="60px" :model="form">
         <el-form-item label="头像：">
           <el-upload
-            class="avatar-uploader"
-            :show-file-list="false"
-            name="filedatas"
-            :action="uploadPictureHost"
-            :http-request="uploadSectionFile"
-            :before-upload="openLoading"
-            multiple
+              class="avatar-uploader"
+              :show-file-list="false"
+              name="filedatas"
+              :action="uploadPictureHost"
+              :http-request="uploadSectionFile"
+              :before-upload="openLoading"
+              multiple
           >
-            <img v-if="form.avatar" :src="form.avatar" class="imgAvatar" />
-            <el-icon v-else><Plus /></el-icon>
+            <img v-if="form.avatar" :src="form.avatar" class="imgAvatar"/>
+            <el-icon v-else>
+              <Plus/>
+            </el-icon>
           </el-upload>
         </el-form-item>
         <el-form-item label="昵称：">
@@ -295,18 +311,18 @@
 
     <!-- 添加反馈弹出框 -->
     <el-dialog
-      title="添加反馈"
-      center
-      v-model="feedbackDialogTableVisible"
-      :lock-scroll="false"
-      :close-on-click-modal="false"
+        title="添加反馈"
+        center
+        v-model="feedbackDialogTableVisible"
+        :lock-scroll="false"
+        :close-on-click-modal="false"
     >
       <el-form
-        label-position="left"
-        label-width="100px"
-        :model="form"
-        :rules="rules"
-        ref="feedbackFormRef"
+          label-position="left"
+          label-width="100px"
+          :model="form"
+          :rules="rules"
+          ref="feedbackFormRef"
       >
         <el-form-item label="反馈类型:" prop="type">
           <el-radio v-model="form.type" label="1">需求</el-radio>
@@ -325,7 +341,7 @@
     </el-dialog>
   </div>
 </template>
-   
+
 <script setup>
 import {
   updateUserInfo,
@@ -336,17 +352,18 @@ import {
   addFeedback,
   getUserCount,
 } from "@/api";
-import { cancelCollect, getCollect } from "@/api/collect";
-import { sign, validateTodayIsSign } from "@/api/sign";
-import { useUserStore } from "@/store/moudel/user.js";
-import { ElMessageBox } from "element-plus";
+import {cancelCollect, getCollect} from "@/api/collect";
+import {sign, validateTodayIsSign} from "@/api/sign";
+import {useUserStore} from "@/store/moudel/user.js";
+import {ElMessageBox} from "element-plus";
+import {removeToken} from "@/utils/cookie.js";
 
-const { proxy } = getCurrentInstance();
+const {proxy} = getCurrentInstance();
 const router = useRouter();
 const userStore = useUserStore();
 const user = ref(userStore.getUserInfo);
 const uploadPictureHost = ref(
-  import.meta.env.Vite_APP_BASE_API + "/file/upload"
+    import.meta.env.Vite_APP_BASE_API + "/file/upload"
 );
 const dataList = ref([]);
 const pageData = ref({
@@ -374,21 +391,21 @@ const btnList = ref([
   },
 ]);
 const today = ref(
-  new Date().getFullYear() +
+    new Date().getFullYear() +
     "-" +
     (new Date().getMonth() + 1 < 10
-      ? "0" + (new Date().getMonth() + 1)
-      : new Date().getMonth() + 1) +
+        ? "0" + (new Date().getMonth() + 1)
+        : new Date().getMonth() + 1) +
     "-" +
     (new Date().getDate() < 10
-      ? "0" + new Date().getDate()
-      : new Date().getDate())
+        ? "0" + new Date().getDate()
+        : new Date().getDate())
 );
 const isTodaySign = ref(false);
 const rules = ref({
-  title: [{ required: true, message: "请输入反馈标题", trigger: "blur" }],
-  type: [{ required: true, message: "请选择反馈类型", trigger: "blur" }],
-  content: [{ required: true, message: "请输入反馈详细内容", trigger: "blur" }],
+  title: [{required: true, message: "请输入反馈标题", trigger: "blur"}],
+  type: [{required: true, message: "请选择反馈类型", trigger: "blur"}],
+  content: [{required: true, message: "请输入反馈详细内容", trigger: "blur"}],
 });
 const count = ref({
   article: 0,
@@ -399,15 +416,15 @@ const loading = ref(false);
 const btnRef = ref();
 const feedbackFormRef = ref();
 
-//获取用户的文章、粉丝等数据
 function getCount() {
   getUserCount(user.value.id).then((res) => {
-    let obj = {
-      article: res.extra.articleCount,
-      collect: res.extra.collectCount,
-      followed: res.extra.followedCount,
+    count.value = {
+      article: res.data.articleCount,
+      collect: res.data.collectCount,
+      followed: res.data.followedCount,
     };
-    count.value = obj;
+  }).catch((error) => {
+    proxy.$modal.msgError(error.response.data.msg);
   });
 }
 
@@ -433,8 +450,18 @@ function handleValidateTodayIsSign() {
     if (res.data != null) {
       isTodaySign.value = true;
     }
+  }).catch((error) => {
+    if (error.response.data.statusCode === 403 || error.response.data.statusCode === 401) {
+      proxy.$modal.msgError('登录信息失效，请重新登录！')
+      removeToken();
+      userStore.setUserInfo(null);
+      router.push("/")
+    }
+
+    console.log("error response:" + JSON.stringify(error.response.data))
   });
 }
+
 //签到
 function handleSign() {
   sign(today.value).then((res) => {
@@ -457,9 +484,10 @@ function doUpdateUserInfo() {
     editDialogTableVisible.value = false;
   });
 }
+
 //跳转分类或标签
 function handleClike(id, path) {
-  router.push({ path: path, query: { id: id } });
+  router.push({path: path, query: {id: id}});
 }
 
 //修改用户信息
@@ -476,13 +504,14 @@ function loadMoreData() {
 
 //获取用户信息
 function handleGetUserInfo() {
-  getUserInfo().then((res) => {
+  getUserInfo(user.value.id).then((res) => {
     form.value = res.data;
   });
 }
+
 //更新文章
 function handleUpdateArticle(id) {
-  router.push({ path: "/newposts", query: { id: id } });
+  router.push({path: "/newposts", query: {id: id}});
 }
 
 //取消收藏文章
@@ -493,16 +522,16 @@ function handleCanCollect(index, id) {
     cancelButtonText: "取消",
     type: "warning",
   })
-    .then((_) => {
-      cancelCollect(id).then((res) => {
-        dataList.value.splice(index, 1);
-        proxy.$modal.msgSuccess("取消成功");
+      .then((_) => {
+        cancelCollect(id).then((res) => {
+          dataList.value.splice(index, 1);
+          proxy.$modal.msgSuccess("取消成功");
+        });
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+        proxy.$modal.msg("取消操作");
       });
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      proxy.$modal.msg("取消操作");
-    });
 }
 
 //删除文章
@@ -512,21 +541,23 @@ function handleDeleteArticle(index, id) {
     cancelButtonText: "取消",
     type: "warning",
   })
-    .then(() => {
-      deleteMyArticle(id).then((res) => {
-        dataList.value.splice(index, 1);
-        proxy.$modal.msgSuccess("删除成功");
+      .then(() => {
+        deleteMyArticle(id).then((res) => {
+          dataList.value.splice(index, 1);
+          proxy.$modal.msgSuccess("删除成功");
+        });
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+        proxy.$modal.msg("取消操作");
       });
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      proxy.$modal.msg("取消操作");
-    });
 }
+
 function handlePage() {
   pageData.value.pageNo++;
   loadBefore();
 }
+
 //顶部统计切换点击
 function switchTab(index) {
   if (pageData.value.index == index) {
@@ -563,16 +594,17 @@ function selectAricleList(type) {
   if (type) {
     pageData.value.type = type;
   }
-  getArticleByUserId(user.value.id, pageData.value)
-    .then((res) => {
-      dataList.value.push(...res.data.records);
-      pages.value = res.data.pages;
-      closeLoading();
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      closeLoading();
-    });
+  getArticleByUserId(user.value?.id, pageData.value)
+      .then((res) => {
+        dataList.value.push(...res.data.records);
+        pages.value = res.data.pages;
+        closeLoading();
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+
+        closeLoading();
+      });
 }
 
 //收藏列表
@@ -591,27 +623,27 @@ function uploadBjCoverFile(param) {
   // 文件对象
   formData.append("multipartFile", files.value);
   upload(formData)
-    .then((res) => {
-      let obj = {
-        id: user.value.id,
-        bjCover: res.data,
-      };
-      updateUserInfo(obj)
-        .then((ress) => {
-          user.value.bjCover = res.data;
-          updateStoreUser();
-          proxy.$modal.msgSuccess("修改成功");
-          closeLoading();
-        })
-        .catch((error) => {
-          proxy.$modal.msgError(error.response.data.msg);
-          closeLoading();
-        });
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      closeLoading();
-    });
+      .then((res) => {
+        let obj = {
+          id: user.value.id,
+          bjCover: res.data,
+        };
+        updateUserInfo(obj)
+            .then((ress) => {
+              user.value.bjCover = res.data;
+              updateStoreUser();
+              proxy.$modal.msgSuccess("修改成功");
+              closeLoading();
+            })
+            .catch((error) => {
+              proxy.$modal.msgError(error.response.data.msg);
+              closeLoading();
+            });
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+        closeLoading();
+      });
 }
 
 //上传文件
@@ -622,28 +654,31 @@ function uploadSectionFile(param) {
   // 文件对象
   formData.append("multipartFile", files.value);
   upload(formData)
-    .then((res) => {
-      form.value.avatar = res.data;
-      closeLoading();
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      closeLoading();
-    });
+      .then((res) => {
+        form.value.avatar = res.data;
+        closeLoading();
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+        closeLoading();
+      });
 }
+
 //打开加载框
 function openLoading() {
   loading.value = true;
 }
+
 //关闭加载框
 function closeLoading() {
   loading.value = false;
 }
+
 selectAricleList();
 handleValidateTodayIsSign();
 getCount();
 </script>
-   
+
 <style lang='scss' scoped>
 .imgAvatar {
   width: 80px;
@@ -704,7 +739,7 @@ getCount();
     }
     .article-desc-tag {
       width: 100%;
-          flex-wrap: wrap;
+      flex-wrap: wrap;
     }
   }
 
@@ -808,10 +843,10 @@ getCount();
         top: 0;
         display: flex;
         background: linear-gradient(
-          90deg,
-          rgba(220, 233, 242, 0.5),
-          rgba(255, 255, 255, 0.5),
-          rgba(220, 233, 242, 0.4)
+                90deg,
+                rgba(220, 233, 242, 0.5),
+                rgba(255, 255, 255, 0.5),
+                rgba(220, 233, 242, 0.4)
         );
         text-align: center;
       }
@@ -929,38 +964,38 @@ getCount();
             margin-right: 5px;
             font-weight: 700;
             background: radial-gradient(
-              circle at 49.86% 48.37%,
-              #0090ff 0,
-              #0089ff 3.33%,
-              #3a82ff 6.67%,
-              #717aff 10%,
-              #9371fb 13.33%,
-              #ae67ef 16.67%,
-              #c45de1 20%,
-              #d652d2 23.33%,
-              #e448c2 26.67%,
-              #ef3eb0 30%,
-              #f7369e 33.33%,
-              #fd318c 36.67%,
-              #ff317a 40%,
-              #ff3569 43.33%,
-              #fd3d57 46.67%,
-              #f94646 50%,
-              #f35035 53.33%,
-              #ea5a22 56.67%,
-              #e16308 60%,
-              #d56d00 63.33%,
-              #c97500 66.67%,
-              #bb7d00 70%,
-              #ac8300 73.33%,
-              #9d8900 76.67%,
-              #8c8f00 80%,
-              #7a9300 83.33%,
-              #669700 86.67%,
-              #4f9b00 90%,
-              #309e0e 93.33%,
-              #00a029 96.67%,
-              #00a23d 100%
+                    circle at 49.86% 48.37%,
+                    #0090ff 0,
+                    #0089ff 3.33%,
+                    #3a82ff 6.67%,
+                    #717aff 10%,
+                    #9371fb 13.33%,
+                    #ae67ef 16.67%,
+                    #c45de1 20%,
+                    #d652d2 23.33%,
+                    #e448c2 26.67%,
+                    #ef3eb0 30%,
+                    #f7369e 33.33%,
+                    #fd318c 36.67%,
+                    #ff317a 40%,
+                    #ff3569 43.33%,
+                    #fd3d57 46.67%,
+                    #f94646 50%,
+                    #f35035 53.33%,
+                    #ea5a22 56.67%,
+                    #e16308 60%,
+                    #d56d00 63.33%,
+                    #c97500 66.67%,
+                    #bb7d00 70%,
+                    #ac8300 73.33%,
+                    #9d8900 76.67%,
+                    #8c8f00 80%,
+                    #7a9300 83.33%,
+                    #669700 86.67%,
+                    #4f9b00 90%,
+                    #309e0e 93.33%,
+                    #00a029 96.67%,
+                    #00a23d 100%
             );
             -webkit-background-clip: text;
             background-clip: text;
@@ -1041,6 +1076,7 @@ getCount();
         margin-left: 10px;
         background-color: var(--background-color);
         overflow: hidden;
+
         .status {
           padding: 2px 30px;
           width: 80px;
@@ -1087,6 +1123,7 @@ getCount();
             -webkit-line-clamp: 1;
             margin-bottom: 10px;
             width: fit-content;
+
             &:hover {
               color: var(--theme-color);
             }
@@ -1116,10 +1153,12 @@ getCount();
               .time {
                 margin-right: 15px;
                 color: #555666;
+
                 i {
                   vertical-align: -2px;
                 }
               }
+
               .el-tag {
                 margin-right: 5px;
               }

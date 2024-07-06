@@ -465,7 +465,7 @@ import WOW from 'wow.js'
 import 'wow.js/css/libs/animate.css'
 
 import Clipboard from 'clipboard'
-import { featchHomeData, listArticle, listCategory } from '@/api'
+import { fetchHomeData, listArticle, listCategory } from '@/api'
 import { listSay } from '@/api/say'
 import SiteInfo from '@/components/authorInfo/index.vue'
 import { useSiteStore } from '@/store/moudel/site.js'
@@ -528,13 +528,13 @@ function handleTabClick(tab) {
 }
 //获取主页数据
 function getHomeData() {
-  featchHomeData().then((res) => {
-    bannerList.value = res.extra.articles;
-    tagList.value = res.extra.tagCloud;
+  fetchHomeData().then((res) => {
+    bannerList.value = res.data.bannerArticles;
+    tagList.value = res.data.tags;
     for (var i = 0; i < tagList.value.length; i++) {
       tagList.value[i].font = Math.floor(Math.random() * 10) + 10 + "px";
     }
-    newArticleList.value = res.extra.newArticleList;
+    newArticleList.value = res.data.recommendedArticles;
   });
 }
 //获取所有分类

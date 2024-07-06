@@ -98,15 +98,15 @@ export function listTagAll() {
     })
 }
 
-export function featchHomeData() {
+export function fetchHomeData() {
     return request({
-        url: '/v1/',
+        url: '/home',
         method: 'get',
     })
 }
 export function getHot(type) {
     return request({
-        url: '/v1/hot',
+        url: '/home/hot',
         method: 'get',
         params: {
             type: type
@@ -115,13 +115,13 @@ export function getHot(type) {
 }
 export function report() {
     return request({
-        url: '/v1/report',
+        url: '/home/report',
         method: 'get',
     })
 }
 export function getWebSiteInfo() {
     return request({
-        url: '/v1/webSiteInfo',
+        url: '/home/webSiteInfo',
         method: 'get',
     })
 }
@@ -186,32 +186,29 @@ export function emailRegister(data) {
 }
 export function updateUserInfo(data) {
     return request({
-        url: '/v1/user/',
+        url: '/user',
         method: 'put',
         data
     })
 }
 export function getUserInfo(userId) {
     return request({
-        url: '/v1/user/info',
+        url: '/user',
         method: 'get',
         params: {
             userId: userId
         }
     })
 }
-export function selectUserInfoByToken(token) {
+export function getCurrentUser() {
     return request({
-        url: '/v1/user/selectUserInfoByToken',
-        method: 'get',
-        params: {
-            token: token
-        }
+        url: '/user/current',
+        method: 'get'
     })
 }
 export function getUserCount(id) {
     return request({
-        url: '/v1/user/getUserCount',
+        url: '/user/count',
         method: 'get',
         params: {
             id: id

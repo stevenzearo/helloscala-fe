@@ -19,6 +19,7 @@ import { useAppStore, useSettingsStore } from "@/store";
 import defaultSettings from "@/settings";
 import { ThemeEnum } from "@/enums/ThemeEnum";
 import { SizeEnum } from "@/enums/SizeEnum";
+import router from "@/router";
 
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();
@@ -33,4 +34,14 @@ const fontColor = computed(() => {
     ? "rgba(255, 255, 255, .15)"
     : "rgba(0, 0, 0, .15)";
 });
+
+onMounted(() => {
+  const redirect = sessionStorage.getItem('redirect')
+  if (redirect) {
+    console.log("redirect:" + redirect)
+    sessionStorage.removeItem('redirect')
+    router.push(redirect)
+  }
+})
+
 </script>

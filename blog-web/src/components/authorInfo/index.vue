@@ -1,18 +1,18 @@
 <template>
   <el-card class="box">
-    <img :src="defaultSetting.avatarBg" alt="" />
+    <img :src="defaultSetting.avatarBg" alt=""/>
     <div class="user">
       <div class="avatar_wrapper">
-        <img :src="webInfo.authorAvatar" alt="" class="userAvatar" />
-        <img class="guajian" :src="defaultSetting.avatarGaoda" alt="" />
+        <img :src="webInfo.authorAvatar" alt="" class="userAvatar"/>
+        <img class="guajian" :src="defaultSetting.avatarGaoda" alt=""/>
       </div>
       <a class="username">
         {{ webInfo.author }}
         <el-tooltip
-          class="box-item"
-          effect="dark"
-          content="博主"
-          placement="right"
+            class="box-item"
+            effect="dark"
+            content="博主"
+            placement="right"
         >
           <svg-icon name="bozhu"></svg-icon>
         </el-tooltip>
@@ -21,61 +21,63 @@
         {{ webInfo.authorInfo }}
       </span>
 
-      <div class="lianxi">
-        <a class="hand-style" v-show="isShow(3)" :href="webInfo.github">
-          <svg-icon name="github" />
+      <div class="contact">
+        <a class="hand-style" v-show="isShow(6)" :href="webInfo.github">
+          <svg-icon name="github"/>
         </a>
         <a
-          v-show="isShow(4)"
-          class="gitee hand-style"
-          :href="webInfo.gitee"
-          target="_blank"
-          title="Gitee"
-          rel="noopener noreferrer nofollow"
+            v-show="isShow(4)"
+            class="gitee hand-style"
+            :href="webInfo.gitee"
+            target="_blank"
+            title="Gitee"
+            rel="noopener noreferrer nofollow"
         >
-          <svg-icon name="gitee" />
+          <svg-icon name="gitee"/>
         </a>
         <a
-          v-show="isShow(2)"
-          class="qq hand-style"
-          :href="
+            class="zhihu hand-style"
+            href="https://www.zhihu.com/people/wo-xing-zou-48"
+            target="_blank"
+            title="知乎"
+            rel="noopener noreferrer nofollow"
+        >
+          <svg-icon name="zhihu"/>
+        </a>
+        <a
+            v-show="isShow(2)"
+            class="qq hand-style"
+            :href="
             '//wpa.qq.com/msgrd?v=3&amp;uin=' +
             webInfo.qqNumber +
             '&amp;site=qq&amp;menu=yes'
           "
-          target="_blank"
-          title="QQ"
-          rel="noopener noreferrer nofollow"
+            target="_blank"
+            title="QQ"
+            rel="noopener noreferrer nofollow"
         >
-          <svg-icon name="qq" />
+          <svg-icon name="qq"/>
         </a>
         <a
-          v-show="isShow(1)"
-          class="email hand-style"
-          :href="'mailto:' + webInfo.email"
-          target="_blank"
-          title="邮箱"
-          rel="noopener noreferrer nofollow"
+            v-show="isShow(1)"
+            class="email hand-style"
+            :href="'mailto:' + webInfo.email"
+            target="_blank"
+            title="邮箱"
+            rel="noopener noreferrer nofollow"
         >
-          <svg-icon name="email" />
+          <svg-icon name="email"/>
         </a>
+<!--        todo weibo url-->
         <a
-          class="weibo hand-style"
-          href="https://weibo.com/u/5747542477"
-          target="_blank"
-          title="微博"
-          rel="noopener noreferrer nofollow"
+            v-show="isShow(3)"
+            class="weibo hand-style"
+            href=""
+            target="_blank"
+            title="微博"
+            rel="noopener noreferrer nofollow"
         >
-          <svg-icon name="weibo" />
-        </a>
-        <a
-          class="zhihu hand-style"
-          href="https://www.zhihu.com/people/he-he-85-83-34"
-          target="_blank"
-          title="知乎"
-          rel="noopener noreferrer nofollow"
-        >
-          <svg-icon name="zhihu" />
+          <svg-icon name="weibo"/>
         </a>
       </div>
       <!-- 收藏本站 -->
@@ -86,9 +88,9 @@
   </el-card>
 </template>
 <script setup name="site">
-import { useSiteStore } from "@/store/moudel/site.js";
+import {useSiteStore} from "@/store/moudel/site.js";
 
-const { proxy } = getCurrentInstance();
+const {proxy} = getCurrentInstance();
 const defaultSetting = ref(proxy.$setting);
 const siteStore = useSiteStore();
 const webInfo = ref(siteStore.getWebInfo);
@@ -96,11 +98,13 @@ const webInfo = ref(siteStore.getWebInfo);
 function isShow(type) {
   return webInfo.value.showList.indexOf(type) != -1;
 }
+
 function handleClike(val) {
   window.location.href = val;
 }
+
 function handleCollect() {
-   proxy.$modal.msgSuccess("按CTRL+ D 键将本页加入书签!");
+  proxy.$modal.msgSuccess("按CTRL+ D 键将本页加入书签!");
 }
 </script>
 <style lang="scss" scoped>
@@ -190,38 +194,38 @@ function handleCollect() {
       width: 100%;
       text-align: center;
       background: radial-gradient(
-        circle at 49.86% 48.37%,
-        #0090ff 0,
-        #0089ff 3.33%,
-        #3a82ff 6.67%,
-        #717aff 10%,
-        #9371fb 13.33%,
-        #ae67ef 16.67%,
-        #c45de1 20%,
-        #d652d2 23.33%,
-        #e448c2 26.67%,
-        #ef3eb0 30%,
-        #f7369e 33.33%,
-        #fd318c 36.67%,
-        #ff317a 40%,
-        #ff3569 43.33%,
-        #fd3d57 46.67%,
-        #f94646 50%,
-        #f35035 53.33%,
-        #ea5a22 56.67%,
-        #e16308 60%,
-        #d56d00 63.33%,
-        #c97500 66.67%,
-        #bb7d00 70%,
-        #ac8300 73.33%,
-        #9d8900 76.67%,
-        #8c8f00 80%,
-        #7a9300 83.33%,
-        #669700 86.67%,
-        #4f9b00 90%,
-        #309e0e 93.33%,
-        #00a029 96.67%,
-        #00a23d 100%
+              circle at 49.86% 48.37%,
+              #0090ff 0,
+              #0089ff 3.33%,
+              #3a82ff 6.67%,
+              #717aff 10%,
+              #9371fb 13.33%,
+              #ae67ef 16.67%,
+              #c45de1 20%,
+              #d652d2 23.33%,
+              #e448c2 26.67%,
+              #ef3eb0 30%,
+              #f7369e 33.33%,
+              #fd318c 36.67%,
+              #ff317a 40%,
+              #ff3569 43.33%,
+              #fd3d57 46.67%,
+              #f94646 50%,
+              #f35035 53.33%,
+              #ea5a22 56.67%,
+              #e16308 60%,
+              #d56d00 63.33%,
+              #c97500 66.67%,
+              #bb7d00 70%,
+              #ac8300 73.33%,
+              #9d8900 76.67%,
+              #8c8f00 80%,
+              #7a9300 83.33%,
+              #669700 86.67%,
+              #4f9b00 90%,
+              #309e0e 93.33%,
+              #00a029 96.67%,
+              #00a23d 100%
       );
       -webkit-background-clip: text;
       background-clip: text;
@@ -270,7 +274,7 @@ function handleCollect() {
       }
     }
 
-    .lianxi {
+    .contact {
       border-top: 1px solid var(--border-line);
       justify-content: space-around;
       padding-top: 10px;

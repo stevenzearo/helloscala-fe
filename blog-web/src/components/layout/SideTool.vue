@@ -22,7 +22,13 @@
           <i class="iconfont icon-bg-qrCode"></i>
         </a>
       </template>
-      <el-tabs
+
+      <el-card class="center-align el-tab-pane">
+        公众号
+        <el-image :src="defaultSetting.wxOpenImg">
+        </el-image>
+      </el-card>
+<!--      <el-tabs
         v-model="activeName"
         type="card"
         class="demo-tabs"
@@ -35,7 +41,7 @@
           <el-image :src="defaultSetting.appletImg">
           </el-image>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs>-->
     </el-popover>
 
     <el-tooltip

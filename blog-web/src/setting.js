@@ -7,7 +7,7 @@ export default {
     /**
     * 公众号图片
     */
-    wxOpenImg: "",
+    wxOpenImg: "https://helloscala.cpolar.top/helloscala/asserts/20240629/frenzied_java_land.jpg",
 
     /**
     * 翻转图片-正面

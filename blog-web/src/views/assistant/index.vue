@@ -65,8 +65,8 @@
             >
               <img
                   class="noSelect"
-                  v-lazy="currentAssistantRef.iconUrl"
-                  :key="currentAssistantRef.iconUrl"
+                  v-lazy="currentAssistantRef.avatar"
+                  :key="currentAssistantRef.avatar"
                   @click="handleToUserMain(item.fromUserId)"
               />
               <div class="info">
@@ -138,8 +138,8 @@
             <div :class="'left'">
               <img
                   class="noSelect"
-                  v-lazy="currentAssistantRef.iconUrl"
-                  :key="currentAssistantRef.iconUrl"
+                  v-lazy="currentAssistantRef.avatar"
+                  :key="currentAssistantRef.avatar"
               />
               <div class="info">
                 <div class="nickname noSelect userInfo">
@@ -211,7 +211,7 @@
               data-placeholder="说点什么呢"
           >
           </div>
-          <el-button class="btn" @click="chatWithAssistant(inputRef.innerHTML, 'TEXT')">发送[Enter]</el-button>
+          <el-button class="btn" @click="chatWithAssistant(inputRef.innerText, 'TEXT')">发送[Enter]</el-button>
         </div>
 
         <!-- 自定义右键功能 -->
@@ -585,7 +585,7 @@ function uploadSectionFile(param) {
       .then((res) => {
         //上传之后发送消息
         let content = `<img src="${res.data}" alt="" class="messageImg" style="width: 150px;height: 150px;">`;
-        doSend(content, 2);
+        chatWithAssistant(content, "IMAGE");
         imgDialogVisible.value = false;
       })
       .catch((error) => {
@@ -600,6 +600,7 @@ function splitIpAddress(address) {
 
 //选择用户单聊
 function selectAssistant(item, index) {
+  initWebsocket()
   if (item === undefined) {
     return;
   }
@@ -612,7 +613,6 @@ function selectAssistant(item, index) {
     currentAssistantRef.value = item
     conversationsRef.value.conversations = []
     loadConversations(item.id, 1, 10)
-    console.log("loadConversations:" + JSON.stringify(conversationsRef.value.conversations))
   }
   if (lastIndex.value != null) {
     if (lastIndex.value === index) {
@@ -711,7 +711,6 @@ function loadMoreConversations() {
 function startNewConversation() {
   showMsgRef.value = true;
   showConversationsRef.value = false;
-  // todo
 }
 
 function loadConversationMsg(conversationId, pageNo, pageSize) {
@@ -759,7 +758,7 @@ function handkeyEnter(event) {
   if (event.keyCode == 13) {
     // 阻止默认的换行行为
     event.preventDefault();
-    doSend(inputRef.value.innerHTML, 1);
+    chatWithAssistant(inputRef.value.innerText, "TEXT")
   }
 }
 
@@ -1066,9 +1065,9 @@ function handleWsMsg(msgStr) {
     return;
   }*/
 }
-
+initWebsocket();
 //初始化socket
-function init() {
+function initWebsocket() {
   if (!user.value) {
     proxy.$modal.msgWarning("登录才能进行群聊");
     return;
@@ -1077,11 +1076,9 @@ function init() {
     console.log("您的浏览器不支持WebSocket");
   } else {
     let socketUrl = websoketUrl.value + "/" + user.value.id + "/assistant";
-    if (socket != null) {
-      socket.close();
-      socket = null;
+    if (socket != null && (socket.readyState === 0 || socket.readyState === 1)) {
+      return;
     }
-    // todo
     // 开启一个websocket服务
     socket = new WebSocket(socketUrl);
     socket.addEventListener('open', () => {
@@ -1093,31 +1090,13 @@ function init() {
     });
     socket.addEventListener('close', (event) => {
       console.log("websocket closed!");
-      handleWsMsg(event.data);
+      proxy.$modal.msgError("websocket closed!");
     });
     socket.addEventListener('error', (event) => {
       console.log("websocket error!");
-      handleWsMsg(event.data);
+      proxy.$modal.msgError("websocket error!");
     });
   }
-}
-
-function open() {
-  console.log("websocket已打开");
-  //获取房间列表
-  /*
-  getRoomList().then((res) => {
-    assistantsRef.value.push(...res.data);
-  });
-*/
-  //连接成功后获取历史聊天记录
-  // doGetHistoryList();
-}
-
-function messageScrollTop() {
-  setTimeout(() => {
-    messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
-  }, 500);
 }
 
 watch(visible, (newValue) => {
@@ -1173,9 +1152,6 @@ function imgAdd(pos, $file) {
     mdRef.value.$img2Url(pos, res.data);
   });
 }
-
-
-init();
 </script>
 
 

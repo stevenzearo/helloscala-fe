@@ -96,7 +96,14 @@
             </template>
           </el-dropdown>
         </li>
-
+        <li :class="path === '/assistant' ? 'active' : ''">
+          <span>
+            <router-link :to="'/assistant'" class="hand-style">
+              <el-icon><Help/></el-icon> AI助手
+            </router-link>
+          </span>
+        </li>
+<!--
         <li :class="path === '/say' ? 'active' : ''">
           <span>
             <router-link :to="'/say'" class="hand-style">
@@ -104,6 +111,7 @@
             </router-link>
           </span>
         </li>
+-->
 
         <li :class="path === '/software' ? 'active' : ''">
           <span>

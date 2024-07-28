@@ -17,6 +17,7 @@ import software from '@/views/software/index.vue'
 import chat from '@/views/chat/index.vue'
 import notice from '@/views/notice/index.vue'
 import user from '@/views/user/index.vue'
+import assistant from '@/views/assistant/index.vue'
 
 const routes = [
     {
@@ -69,6 +70,10 @@ const routes = [
             {
                 path: "/say",
                 component: say,
+            },
+            {
+                path: "/assistant",
+                component: assistant,
             },
             {
                 path: "/message",

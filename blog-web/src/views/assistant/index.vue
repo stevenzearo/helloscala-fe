@@ -4,154 +4,221 @@
       <el-card class="itemBox">
         <!-- 标题 -->
         <div class="title">{{ title }}</div>
-        <div class="messageBox" id="messageBox" ref="messageContainer">
-          <!-- 加载更多 -->
-          <div
-            class="more noSelect hand-style"
-            v-show="pageData.pageNo < totalPage"
+        <div class="messageBox" id="conversationBox" ref="conversationContainer" v-if="showConversationsRef">
+          <el-card
+              class="conversationItem"
+              justify="center"
+              v-for="(item, index) in conversationsRef.conversations"
+              @click="showConversationMsg(item)"
+              :key="index"
           >
-            <div v-if="isLoding" class="loading">
-              <div class="spinner"></div>
+            <div class="summary">
+              {{ item.summary }}
             </div>
-            <div @click="handleMore" v-else>加载更多</div>
-          </div>
+            <div class="lastSendTime">
+              上次发送：{{ item.lastSendTime ? item.lastSendTime : item.createTime }}
+            </div>
+
+          </el-card>
+
+          <el-row class="flex-row" justify="center">
+
+            <!--             v-if="conversationsRef.pageNo < conversationsRef.totalPage" -->
+            <div class="noSelect hand-style" v-if="conversationsRef.pageNo < conversationsRef.totalPage">
+              <div v-if="isLoading" class="loading">
+                <div class="spinner"></div>
+              </div>
+              <el-button class="custom-button" type="success" @click="loadMoreConversations" v-else>加载更多
+              </el-button>
+            </div>
+            <div class="noSelect hand-style">
+              <el-button class="custom-button" type="warning" v-if="!showMsgRef" @click="startNewConversation">
+                开始新会话
+              </el-button>
+            </div>
+          </el-row>
+        </div>
+
+        <div class="messageBox" id="messageBox" ref="messageContainer" v-if="showMsgRef">
+          <!--          load more bth -->
+          <el-row class="flex-row" justify="center">
+
+            <!--             v-if="conversationsRef.pageNo < conversationsRef.totalPage" -->
+            <div class="noSelect hand-style" v-if="messagesRef.pageNo < messagesRef.totalPage">
+              <div v-if="isLoading" class="loading">
+                <div class="spinner"></div>
+              </div>
+              <el-button class="custom-button" type="success" @click="showMoreConversationMsg" v-else>加载更多
+              </el-button>
+            </div>
+          </el-row>
           <!-- 消息内容框 -->
           <div
-            class="messageItem"
-            v-for="(item, index) in messageList"
-            :key="index"
+              class="messageItem"
+              v-for="(item, index) in messagesRef.msgs"
+              :key="index"
           >
-            <!-- 左边消息框 别人发送的消息 -->
+            <!-- assistant msgs -->
             <div
-              :class="item.isWithdraw ? 'withdraw' : 'left'"
-              v-if="user && item.fromUserId != user.id"
+                :class="'left'"
+                v-if="item.sendFrom === 'ASSISTANT'"
             >
               <img
-                class="noSelect"
-                v-lazy="item.fromUserAvatar"
-                :key="item.fromUserAvatar"
-                @click="handleToUserMain(item.fromUserId)"
+                  class="noSelect"
+                  v-lazy="currentAssistantRef.iconUrl"
+                  :key="currentAssistantRef.iconUrl"
+                  @click="handleToUserMain(item.fromUserId)"
               />
               <div class="info">
                 <div class="nickname noSelect userInfo">
-                  {{ item.fromUserNickname }}
-                  <span v-if="item.fromUserId == 1">
-                    <el-tooltip effect="dark" content="作者" placement="top">
-                      <svg-icon class="tag" name="bozhu"></svg-icon>
-                    </el-tooltip>
-                  </span>
-                  <span v-if="item.ipSource" class="item">
-                    <el-icon><LocationInformation /></el-icon> IP属地:{{
-                      splitIpAddress(item.ipSource)
-                    }}
-                  </span>
+                  {{ currentAssistantRef.name }}
                   <span class="item">
-                    <el-icon><Clock /></el-icon> {{ item.createTimeStr }}</span
+                    <el-icon><Clock/></el-icon> {{ item.createTime }}</span
                   >
                 </div>
 
                 <span
-                  v-if="!item.isWithdraw"
-                  v-html="item.content"
-                  class="messageContent"
-                  @contextmenu.prevent="openMenu($event, item, index)"
+                    v-html="item.content"
+                    class="messageContent"
+                    @contextmenu.prevent="openMenu($event, item, index)"
                 >
-                </span>
-                <span class="noSelect" v-else style="color: var(--text-color)">
-                  " {{ item.fromUserNickname }} " 撤回了一条消息
                 </span>
               </div>
             </div>
-            <!-- 右边消息框 自己发送的消息 -->
-            <div :class="item.isWithdraw ? 'withdraw' : 'right'" v-else>
+            <!-- user msg -->
+            <div :class="'right'" v-else>
               <div class="info">
                 <div>
                   <img
-                    class="noSelect"
-                    v-lazy="item.fromUserAvatar"
-                    :key="item.fromUserAvatar"
+                      class="noSelect"
+                      v-lazy="user.avatar"
+                      :key="item.avatar"
                   />
                 </div>
                 <div class="nickname">
                   <div class="userInfo">
                     <span class="item noSelect"
-                      ><el-icon><Clock /></el-icon>
-                      {{ item.createTimeStr }}</span
+                    ><el-icon><Clock/></el-icon>
+                      {{ item.createTime }}</span
                     >
-                    <span v-if="item.ipSource" class="item noSelect"
-                      ><el-icon><LocationInformation /></el-icon> IP属地:{{
-                        splitIpAddress(item.ipSource)
-                      }}
-                    </span>
-                    <span v-if="item.fromUserId == 1">
-                      <el-tooltip effect="dark" content="作者" placement="top">
-                        <svg-icon class="tag" name="bozhu"></svg-icon>
-                      </el-tooltip>
-                    </span>
-                    <span class="noSelect">{{ item.fromUserNickname }}</span>
+                    <!--                    <span v-if="item.ipSource" class="item noSelect"
+                                        ><el-icon><LocationInformation/></el-icon> IP属地:{{
+                                            splitIpAddress(item.ipSource)
+                                          }}
+                                        </span>
+                                        <span v-if="item.fromUserId == 1">
+                                          <el-tooltip effect="dark" content="作者" placement="top">
+                                            <svg-icon class="tag" name="bozhu"></svg-icon>
+                                          </el-tooltip>
+                                        </span>-->
+                    <span class="noSelect">{{ user.nickname }}</span>
                   </div>
-
                   <div
-                    v-if="!item.isWithdraw"
-                    v-html="item.content"
-                    class="nowMessageContent"
-                    @contextmenu.prevent="openMenu($event, item, index)"
-                  ></div>
-                  <div style="color: var(--text-color)" v-else class="noSelect">
-                    " {{ item.fromUserNickname }} " 撤回了一条消息
+                      v-html="item.content"
+                      class="nowMessageContent"
+                      @contextmenu.prevent="openMenu($event, item, index)">
                   </div>
+                  <!--                  <div
+                                        v-if="!item.isWithdraw"
+                                        v-html="item.content"
+                                        class="nowMessageContent"
+                                        @contextmenu.prevent="openMenu($event, item, index)"
+                                    ></div>
+                                    <div style="color: var(&#45;&#45;text-color)" v-else class="noSelect">
+                                      " {{ item.fromUserNickname }} " 撤回了一条消息
+                                    </div>-->
                 </div>
               </div>
             </div>
+
+          </div>
+
+          <!--            message delta -->
+          <div class="messageItem" v-show="!messageDeltaRef.done">
+            <div :class="'left'">
+              <img
+                  class="noSelect"
+                  v-lazy="currentAssistantRef.iconUrl"
+                  :key="currentAssistantRef.iconUrl"
+              />
+              <div class="info">
+                <div class="nickname noSelect userInfo">
+                  {{ currentAssistantRef.name }}
+                </div>
+              </div>
+
+              <span
+                  v-html="messageDeltaRef.msg?.content"
+                  class="messageContent"
+                  @contextmenu.prevent="openMenu($event, item, index)"
+              >
+                </span>
+            </div>
+          </div>
+
+          <!--            followUp items -->
+          <div class="messageItem">
+            <div v-for="(followUpItem, index) in followUpsRef">
+              <el-row class="flex-row noSelect" justify="center"
+                      style="color: var(--text-color); justify-content: center">
+
+                提示：{{ followUpItem.content }}
+              </el-row>
+            </div>
+          </div>
+          <!--        loading chat-->
+          <div v-if="loadingChatRef" class="loading">
+            <div class="spinner"></div>
           </div>
         </div>
+
+
         <!-- 输入框 -->
-        <div class="bottom">
+        <div class="bottom" v-show="showMsgRef">
           <!-- 输入选择 如表情、图片等 -->
-          <div class="toolbars">
+<!--          <div class="toolbars">
             <div>
               <span class="item hand-style" @click.stop="handleOpen">
                 <i class="iconfont icon-biaoqing"></i>
               </span>
               <el-upload
-                class="avatar-uploader"
-                :show-file-list="false"
-                name="filedatas"
-                :action="uploadPictureHost"
-                :http-request="uploadSectionFile"
-                multiple
+                  class="avatar-uploader"
+                  :show-file-list="false"
+                  name="filedatas"
+                  :action="uploadPictureHost"
+                  :http-request="uploadSectionFile"
+                  multiple
               >
                 <span class="item hand-style">
-                  <el-icon><PictureFilled /></el-icon>
+                  <el-icon><PictureFilled/></el-icon>
                 </span>
               </el-upload>
             </div>
-          </div>
+          </div>-->
           <!-- 表情框 -->
-          <div class="emoji-wrapper" v-show="emojiShow">
-            <Emoji @chooseEmoji="handleChooseEmoji" />
-          </div>
+<!--          <div class="emoji-wrapper" v-show="emojiShow">
+            <Emoji @chooseEmoji="handleChooseEmoji"/>
+          </div>-->
           <!-- 输入内容 -->
           <div
-            id="im-input-box"
-            class="im-input-box"
-            ref="inputRef"
-            @input="updateContent"
-            contenteditable="true"
-            @paste="optimizePasteEvent"
-            @keydown="handkeyEnter"
-            data-placeholder="说点什么呢"
-          ></div>
-          <el-button class="btn" @click="doSend(inputRef.innerHTML, 1)"
-            >发送[Enter]</el-button
+              id="im-input-box"
+              class="im-input-box"
+              ref="inputRef"
+              @input="updateContent"
+              contenteditable="true"
+              @paste="optimizePasteEvent"
+              @keydown="handkeyEnter"
+              data-placeholder="说点什么呢"
           >
+          </div>
+          <el-button class="btn" @click="chatWithAssistant(inputRef.innerHTML, 'TEXT')">发送[Enter]</el-button>
         </div>
 
         <!-- 自定义右键功能 -->
         <ul
-          v-show="visible"
-          :style="{ left: left + 'px', top: top + 'px' }"
-          class="contextmenu"
+            v-show="visible"
+            :style="{ left: left + 'px', top: top + 'px' }"
+            class="contextmenu"
         >
           <li @click="doClipboard" class="copyBtn">
             <div class="menuitem hand-style">
@@ -164,16 +231,8 @@
             </div>
           </li>
           <li
-            @click="handlePrivate"
-            v-if="message && message.fromUserId != user.id"
-          >
-            <div class="menuitem hand-style">
-              <el-icon><ChatDotRound /></el-icon>私信
-            </div>
-          </li>
-          <li
-            @click="doWithdraw"
-            v-if="message && message.fromUserId == user.id"
+              @click="doWithdraw"
+              v-if="message && message.fromUserId === user.id"
           >
             <div class="menuitem hand-style">
               <i class="iconfont icon-chehui"></i>撤回
@@ -181,8 +240,13 @@
           </li>
           <li class="sousuo">
             <div class="menuitem hand-style">
-              <el-icon><Search /></el-icon>搜一搜
-              <el-icon><ArrowRight /></el-icon>
+              <el-icon>
+                <Search/>
+              </el-icon>
+              搜一搜
+              <el-icon>
+                <ArrowRight/>
+              </el-icon>
 
               <ul class="sousuomenu">
                 <li @click="handleSearch(0)">
@@ -203,49 +267,50 @@
       <div class="online">
         <ul class="online-item">
           <li
-            ref="roomRef"
-            :class="
+              ref="roomRef"
+              :class="
               !index ? 'onlineLi hand-style active' : 'onlineLi hand-style'
             "
-            v-for="(item, index) in roomList"
-            :key="index"
+              v-for="(item, index) in assistantsRef"
+              :key="index"
           >
-            <div class="room-list-item" @click="selectUserIm(item, index)">
-              <div class="room-list-item">
-                <img class="img" :src="item.avatar" alt="" />
-                <div class="roomName">
-                  {{ item.nickname }}
+            <el-row>
+              <div class="room-list-item" @click="selectAssistant(item, index)">
+                <div class="room-list-item">
+                  <img class="img" :src="item.avatar" alt=""/>
+                  <div class="roomName">
+                    {{ item.name }}
+                  </div>
                 </div>
+<!--                <div class="readNum" v-if="item.readNum">
+                  <span>{{ item.readNum }}</span>
+                </div>-->
               </div>
-              <div class="readNum" v-if="item.readNum">
-                <span>{{ item.readNum }}</span>
-              </div>
-            </div>
-            <div class="close" @click="closeRoom(item.id, index)">
-              <span
-                ><el-icon><Close /></el-icon
-              ></span>
-            </div>
+
+            </el-row>
+            <el-row v-if="item.description">
+              {{ item.description }}
+            </el-row>
           </li>
         </ul>
       </div>
     </div>
     <el-dialog
-      :lock-scroll="false"
-      title="粘贴图片"
-      v-model="imgDialogVisible"
-      width="30%"
-      center
+        :lock-scroll="false"
+        title="粘贴图片"
+        v-model="imgDialogVisible"
+        width="30%"
+        center
     >
       <div style="width: 100%" id="dialogImg">
         <div v-html="textImg"></div>
       </div>
       <span class="dialog-footer">
         <el-button size="small" @click="imgDialogVisible = false"
-          >取 消</el-button
+        >取 消</el-button
         >
         <el-button size="small" type="primary" @click="uploadSectionFile(null)"
-          >发 送</el-button
+        >发 送</el-button
         >
       </span>
     </el-dialog>
@@ -253,12 +318,11 @@
   </div>
 </template>
 
-<script setup name='chat'>
-let socket;
-import { upload } from "@/api";
+<script setup name='assistant'>
+import {useAssistantStore} from "@/store/moudel/assistant.js";
+
+import {upload} from "@/api";
 import {
-  getImHistory,
-  getUserImHistoryList,
   send,
   withdraw,
   getRoomList,
@@ -268,25 +332,48 @@ import {
 } from "@/api/im";
 import Emoji from "@/components/emoji/index.vue";
 import imagePreview from "@/components/image-preview/index.vue";
-import { useUserStore } from "@/store/moudel/user.js";
-import { useSiteStore } from "@/store/moudel/site.js";
-import { ElMessageBox } from "element-plus";
-import Clipboard from "clipboard";
+import {useUserStore} from "@/store/moudel/user.js";
+import {useSiteStore} from "@/store/moudel/site.js";
+import {ElMessageBox} from "element-plus";
+import Clipboard, {copy} from "clipboard";
+import {chat, list, listConversationMsg, listConversations} from "@/api/assistant.js";
+import {removeToken} from "@/utils/cookie.js";
+import router from "@/router/index.js";
+import {editorToolbars} from "@/views/assistant/data.js";
 
-const { proxy } = getCurrentInstance();
+let socket;
+
+const mdRef = ref();
+
+const {proxy} = getCurrentInstance();
 const userStore = useUserStore();
 const siteStore = useSiteStore();
+const assistantStore = useAssistantStore()
+
 const uploadPictureHost = ref(
-  import.meta.env.VITE_APP_BASE_API + "/file/upload"
+    import.meta.env.VITE_APP_BASE_API + "/file/upload"
 );
 const websoketUrl = ref(import.meta.env.VITE_APP_WEBSOCKET_API);
 const visible = ref(false);
 const imgDialogVisible = ref(false);
-const isLoding = ref(false);
+const isLoading = ref(false);
+const loadingChatRef = ref(false);
+
 const top = ref(0);
 const left = ref(0);
 const text = ref("");
-const messageList = ref([]);
+
+const conversationsRef = ref({pageNo: 1, pageSize: 10, conversations: []})
+const currentConversationRef = ref(null)
+
+const messagesRef = ref({pageNo: 1, pageSize: 5, msgs: []});
+const followUpsRef = ref([]);
+const messageDeltaRef = ref({msgId: null, done: true, msg: null})
+
+const showMsgRef = ref(false)
+const showConversationsRef = ref(true)
+const currentAssistantRef = ref(null)
+
 const files = ref([]);
 const emojiShow = ref(false);
 const user = ref(userStore.getUserInfo);
@@ -295,19 +382,90 @@ const isBackTop = ref(false);
 const message = ref(null);
 const textImg = ref(null);
 const selectIndex = ref(null);
-const title = ref("Hello Scala交流群");
+const title = ref("AI助手");
 const lastIndex = ref(null);
 const pageData = ref({
   pageNo: 1,
   pageSize: 10,
 });
+const content = ref(null)
+
+const dialog = reactive({
+  title: "",
+  visible: false,
+});
+
+
 const onlineUserList = ref([]);
-const roomList = ref([
-  {
-    avatar: siteStore.getWebInfo.logo,
-    nickname: "Hello Scala交流群",
-  },
-]);
+
+function showConversationMsg(item) {
+  loadingChatRef.value = true;
+  currentConversationRef.value = item;
+  showConversationsRef.value = false;
+  followUpsRef.value = []
+  showMsgRef.value = true;
+  messagesRef.value.msgs = []
+  messagesRef.value.pageNo = 1;
+  const pageNo = messagesRef.value.pageNo;
+  const pageSize = messagesRef.value.pageSize;
+  loadConversationMsg(item.id, pageNo, pageSize);
+  loadingChatRef.value = false;
+}
+
+function showMoreConversationMsg() {
+  isBackTop.value = true;
+  isLoading.value = true;
+  const currentConversation = currentConversationRef.value;
+  if (currentConversation == null) {
+    return
+  }
+
+  const conversationId = currentConversation.id
+  messagesRef.value.pageNo += 1
+  const pageNo = messagesRef.value.pageNo
+  const pageSize = messagesRef.value.pageSize
+  loadConversationMsg(conversationId, pageNo, pageSize)
+  isLoading.value = false;
+}
+
+function toAssistantListSummary(summaryList) {
+  return summaryList.map(assistant => {
+    console.log(JSON.stringify(assistant))
+    return {
+      id: assistant.id,
+      avatar: assistant.iconUrl,
+      name: assistant.name,
+      description: assistant.description
+    }
+  })
+}
+
+const assistantsRef = ref([]);
+
+function initAssistantSummary() {
+  let summaryList = assistantStore.getSummaryList;
+  if (summaryList === undefined || summaryList.length <= 0) {
+    list().then((res) => {
+      const assistantSummaries = res.data.assistantSummaries;
+      assistantStore.setSummaryList(assistantSummaries);
+      summaryList = assistantSummaries
+    }).catch((error) => {
+      proxy.$modal.msgError(error.response.data.msg);
+    });
+  }
+  assistantsRef.value = toAssistantListSummary(summaryList);
+  const item = assistantsRef.value[0];
+  lastIndex.value = 0;
+  selectAssistant(item, 0);
+  console.log("set room list success!")
+}
+
+initAssistantSummary()
+
+onBeforeUnmount(() => {
+  assistantStore.setSummaryList([])
+})
+
 const selectUserOnline = ref(null);
 const atMember = ref("");
 const searchUrl = ref([
@@ -325,7 +483,7 @@ const messageContainer = ref();
 onMounted(() => {
   document.addEventListener("click", handleClose);
   document.getElementById("im").oncontextmenu = new Function(
-    "event.returnValue=false"
+      "event.returnValue=false"
   );
   inputRef.value.onclick = () => {
     // 获取选定对象
@@ -337,6 +495,7 @@ onMounted(() => {
     }
   };
 });
+
 function updateContent(event) {
   let selection = window.getSelection();
   lastEditRange.value = selection.getRangeAt(0);
@@ -347,12 +506,13 @@ function updateContent(event) {
     return;
   }
 }
+
 function optimizePasteEvent(e) {
   // 监听粘贴内容到输入框事件，对内容进行处理 处理掉复制的样式标签，只拿取文本部分
   e.stopPropagation();
   e.preventDefault();
   let text = "",
-    event = e.originalEvent || e;
+      event = e.originalEvent || e;
   if (event.clipboardData && event.clipboardData.getData) {
     text = event.clipboardData.getData("text/plain");
   } else if (window.clipboardData && window.clipboardData.getData) {
@@ -364,6 +524,7 @@ function optimizePasteEvent(e) {
     document.execCommand("paste", false, text);
   }
 }
+
 //搜索
 function handleSearch(type) {
   let url = searchUrl.value[type] + message.value.content.trim();
@@ -377,21 +538,16 @@ function closeRoom(id, index) {
     cancelButtonText: "取消",
     type: "warning",
   })
-    .then(() => {
-      if (!id) {
-        proxy.$modal.msgWarning("群聊不允许删除");
-        return;
-      }
-      deleteRoom(id).then((res) => {
-        roomList.value.splice(index, 1);
-
-        proxy.$modal.msgSuccess("删除成功");
+      .then(() => {
+        if (!id) {
+          proxy.$modal.msgWarning("群聊不允许删除");
+          return;
+        }
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+        proxy.$modal.msg("取消");
       });
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-      proxy.$modal.msg("取消");
-    });
 }
 
 //发送图片
@@ -416,7 +572,7 @@ function uploadSectionFile(param) {
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
       }
-      const blob = new Blob(byteArrays, { type: "image/jpeg" });
+      const blob = new Blob(byteArrays, {type: "image/jpeg"});
       formData.append("images[]", blob, "image" + i + ".jpg"); // 根据实际的文件名进行调整
       formData.append("multipartFile", blob, Date.now() + ".jpg");
     }
@@ -426,58 +582,49 @@ function uploadSectionFile(param) {
   }
 
   upload(formData)
-    .then((res) => {
-      //上传之后发送消息
-      let content = `<img src="${res.data}" alt="" class="messageImg" style="width: 150px;height: 150px;">`;
-      doSend(content, 2);
-      imgDialogVisible.value = false;
-    })
-    .catch((error) => {
-      proxy.$modal.msgError(error.response.data.msg);
-    });
+      .then((res) => {
+        //上传之后发送消息
+        let content = `<img src="${res.data}" alt="" class="messageImg" style="width: 150px;height: 150px;">`;
+        doSend(content, 2);
+        imgDialogVisible.value = false;
+      })
+      .catch((error) => {
+        proxy.$modal.msgError(error.response.data.msg);
+      });
 }
+
 //截取地址
 function splitIpAddress(address) {
   return address.split("|")[1];
 }
+
 //选择用户单聊
-function selectUserIm(item, index) {
+function selectAssistant(item, index) {
+  if (item === undefined) {
+    return;
+  }
+  title.value = "[AI助手]" + item.name;
+  showConversationsRef.value = true;
+  showMsgRef.value = false;
+  if (currentAssistantRef.value === undefined
+      || currentAssistantRef.value === null
+      || item.id !== currentAssistantRef.value?.id) {
+    currentAssistantRef.value = item
+    conversationsRef.value.conversations = []
+    loadConversations(item.id, 1, 10)
+    console.log("loadConversations:" + JSON.stringify(conversationsRef.value.conversations))
+  }
   if (lastIndex.value != null) {
-      if (lastIndex.value == index) {
+    if (lastIndex.value === index) {
       return;
     }
     roomRef.value[lastIndex.value].className = "onlineLi hand-style";
-  
   }
   roomRef.value[0].className = "onlineLi hand-style";
   roomRef.value[index].className += " active";
   lastIndex.value = index;
-
-  pageData.value.pageNo = 1;
-  //为空则是群聊
-  if (!item.receiveId) {
-    title.value = "Hello Scala交流群";
-    messageList.value = [];
-    selectUserOnline.value = null;
-    doGetHistoryList();
-    return;
-  }
-  title.value = item.nickname;
-  pageData.value.fromUserId = user.value.id;
-  pageData.value.toUserId = item.receiveId;
-  messageList.value = [];
-  selectUserOnline.value = item;
-  getUserImHistoryList(pageData.value).then((res) => {
-    let arr = res.data.records;
-    for (let i = arr.length - 1; i >= 0; i--) {
-      messageList.value.push(arr[i]);
-    }
-    totalPage.value = res.data.pages;
-  });
-  //修改为已读
-  read(item.receiveId);
-  item.readNum = 0;
 }
+
 //右击
 function openMenu(e, item, index) {
   var x = e.pageX; //这个应该是相对于整个浏览器页面的x坐标，左上角为坐标原点（0,0）
@@ -503,21 +650,25 @@ function doWithdraw() {
     type: 1,
   };
   // 将组装好的json发送给服务端，由服务端进行转发
-  withdraw(msg).then((re) => {});
+  withdraw(msg).then((re) => {
+  });
 }
+
 //私信
 function handlePrivate() {
   addRoom(message.value.fromUserId).then((res) => {
-    roomList.value.push(res.data);
+    assistantsRef.value.push(res.data);
   });
 }
+
 //翻译
 function translate() {
   window.open(
-    "https://fanyi.baidu.com/?aldtype=16047#zh/en/" + message.value.content,
-    "_blank"
+      "https://fanyi.baidu.com/?aldtype=16047#zh/en/" + message.value.content,
+      "_blank"
   );
 }
+
 //复制
 function doClipboard() {
   const clipboard = new Clipboard(".copyBtn", {
@@ -530,43 +681,62 @@ function doClipboard() {
     clipboard.destroy();
   });
 }
+
 //关闭菜单
 function closeMenu() {
   visible.value = false; //关闭菜单
 }
-//加载更多消息
-function handleMore() {
-  pageData.value.pageNo++;
-  isBackTop.value = true;
-  isLoding.value = true;
-  if (selectUserOnline.value) {
-    getUserImHistoryList(pageData.value).then((res) => {
-      let arr = res.data.records;
-      for (let i = 0; i < arr.length; i++) {
-        messageList.value.unshift(arr[i]);
-      }
-      isLoding.value = false;
-    });
+
+function loadConversations(assistantId, pageNo, pageSize) {
+  listConversations(assistantId, {pageNo: pageNo, pageSize: pageSize}).then(res => {
+    console.log("listConversations:" + JSON.stringify(res))
+    conversationsRef.value.total = res.data.total;
+    conversationsRef.value.totalPage = res.data.totalPage;
+    conversationsRef.value.pageNo = res.data.currentPage;
+    conversationsRef.value.conversations.push(...res.data.conversations);
+  })
+}
+
+function loadMoreConversations() {
+  if (currentAssistantRef.value == null) {
     return;
   }
-  getImHistory(pageData.value).then((res) => {
-    let arr = res.data.records;
-    for (let i = 0; i < arr.length; i++) {
-      messageList.value.unshift(arr[i]);
-    }
-    isLoding.value = false;
-  });
+  const assistantId = currentAssistantRef.value.id
+  conversationsRef.value.pageNo += 1
+  const pageNo = conversationsRef.value.pageNo
+  const pageSize = conversationsRef.value.pageSize
+  loadConversations(assistantId, pageNo, pageSize);
 }
+
+function startNewConversation() {
+  showMsgRef.value = true;
+  showConversationsRef.value = false;
+  // todo
+}
+
+function loadConversationMsg(conversationId, pageNo, pageSize) {
+  listConversationMsg(conversationId, {pageNo: pageNo, pageSize: pageSize}).then(res => {
+    console.log("listConversationMsg:" + JSON.stringify(res))
+    const msgs = res.data.msgs.reverse();
+    messagesRef.value.total = res.data.total;
+    messagesRef.value.totalPage = res.data.totalPage;
+    messagesRef.value.pageNo = res.data.currentPage;
+    const originMsgs = messagesRef.value.msgs
+    messagesRef.value.msgs = msgs.concat(originMsgs);
+  })
+}
+
 //获取群聊历史记录
 function doGetHistoryList() {
-  getImHistory(pageData.value).then((res) => {
+  /*getImHistory(pageData.value).then((res) => {
     let arr = res.data.records;
     for (let i = arr.length - 1; i >= 0; i--) {
       messageList.value.push(arr[i]);
     }
     totalPage.value = res.data.pages;
-  });
+  });*/
 }
+
 //Enter事件
 function handkeyEnter(event) {
   // 判断是否按下了Ctrl+Enter键
@@ -589,13 +759,15 @@ function handkeyEnter(event) {
   if (event.keyCode == 13) {
     // 阻止默认的换行行为
     event.preventDefault();
-    doSend(inputRef.value.innerHTML);
+    doSend(inputRef.value.innerHTML, 1);
   }
 }
+
 //打开表情框
 function handleOpen() {
   emojiShow.value = !emojiShow.value;
 }
+
 //关闭表情框
 function handleClose(e) {
   if (e.target.className == "messageImg") {
@@ -605,14 +777,15 @@ function handleClose(e) {
     };
   }
   if (
-    e.target.className != "el-radio-button__orig-radio" &&
-    e.target.className != "el-radio-button__inner" &&
-    e.target.className != "el-upload__input" &&
-    e.target.className != "el-icon-plus avatar-uploader-icon"
+      e.target.className != "el-radio-button__orig-radio" &&
+      e.target.className != "el-radio-button__inner" &&
+      e.target.className != "el-upload__input" &&
+      e.target.className != "el-icon-plus avatar-uploader-icon"
   ) {
     emojiShow.value = false;
   }
 }
+
 //添加表情
 function handleChooseEmoji(value) {
   // 创建一个img标签（表情）
@@ -653,6 +826,42 @@ function handleChooseEmoji(value) {
     return;
   }
 }
+
+//发送消息
+function chatWithAssistant(content, type) {
+  console.log("start chat: content=" + content + "|  type=" + type)
+  loadingChatRef.value = true;
+  messageDeltaRef.value.deltas = [];
+  followUpsRef.value = [];
+  if (typeof WebSocket == "undefined") {
+    console.log("您的浏览器不支持WebSocket");
+    return;
+  }
+  if (!user.value) {
+    proxy.$modal.msgWarning("请先登录");
+    userStore.setLoginFlag(true);
+    return;
+  }
+  const reg = /^\s*$/;
+  if (reg.test(content)) {
+    console.log("输入值不能为空");
+    return;
+  }
+  const currentAssistantId = currentAssistantRef.value.id;
+  const conversationId = currentConversationRef.value?.id;
+  const msg = {
+    content: content,
+    msgType: type,
+  };
+  chat(currentAssistantId, conversationId, msg).then(res => {
+    currentConversationRef.vaue = {id: res.data.id};
+  })
+  //发送消息
+  // send(message);
+  // 构建消息内容，本人消息
+  inputRef.value.innerText = null;
+}
+
 //发送消息
 function doSend(content, type) {
   if (typeof WebSocket == "undefined") {
@@ -696,10 +905,168 @@ function doSend(content, type) {
   }
 
   //发送消息
-  send(message);
+  // send(message);
   // 构建消息内容，本人消息
   inputRef.value.innerText = null;
 }
+
+/*
+
+const msg = [
+  {
+    botId: "7390985480239972393",
+    content: "a",
+    contentType: "TEXT",
+    conversationId: "7396327013709135884",
+    createTime: "2024-07-27 22:46:46",
+    sendFrom: "ASSISTANT",
+    type: "ANSWER",
+    event: "MESSAGE_DELTA",
+    userId: "1"
+  },
+  {
+    botId: "7390985480239972393",
+    content: "b",
+    contentType: "TEXT",
+    conversationId: "7396327013709135884",
+    createTime: "2024-07-27 22:46:46",
+    sendFrom: "ASSISTANT",
+    type: "ANSWER",
+    event: "MESSAGE_DELTA",
+    userId: "1"
+  },
+  {
+    botId: "7390985480239972393",
+    content: "ab",
+    contentType: "TEXT",
+    conversationId: "7396327013709135884",
+    createTime: "2024-07-27 22:46:46",
+    sendFrom: "ASSISTANT",
+    type: "ANSWER",
+    event: "MESSAGE_COMPLETED",
+    userId: "1"
+  },
+  {
+    botId: "7390985480239972393",
+    content: "f1",
+    contentType: "TEXT",
+    conversationId: "7396327013709135884",
+    createTime: "2024-07-27 22:46:46",
+    sendFrom: "ASSISTANT",
+    type: "FOLLOW_UP",
+    event: "MESSAGE_COMPLETED",
+    userId: "1"
+  },
+  {
+    botId: "7390985480239972393",
+    content: "f2",
+    contentType: "TEXT",
+    conversationId: "7396327013709135884",
+    createTime: "2024-07-27 22:46:46",
+    sendFrom: "ASSISTANT",
+    type: "FOLLOW_UP",
+    event: "MESSAGE_COMPLETED",
+    userId: "1"
+  }
+]
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+for (let i = 0; i < msg.length; i++) {
+  console.log("mock push msg");
+  sleep(3000).then(() => {
+    handleWsMsg(JSON.stringify(msg[i]))
+  })
+}
+*/
+function handleWsMsg(msgStr) {
+  console.log("handle msg:" + msgStr);
+  const msg = JSON.parse(msgStr);
+  if (msg.sendFrom === undefined || msg.sendFrom === null) {
+    return;
+  }
+  if ('OBJECT_STRING' === msg.contentType) {
+    const contentObj = JSON.parse(msg.content);
+    if ("text" === contentObj.type) {
+      msg.content = contentObj.content;
+    } else {
+      // todo get file
+    }
+  }
+  if ("USER" === msg.sendFrom) {
+    console.log("push user msg:" + JSON.stringify(msg));
+    messagesRef.value.msgs.push(msg);
+    isBackTop.value = false;
+    return;
+  }
+  if ("ASSISTANT" === msg.sendFrom && "ANSWER" === msg.type && "MESSAGE_DELTA" === msg.event) {
+    isBackTop.value = false;
+    loadingChatRef.value = false;
+    messageDeltaRef.value.done = false;
+    if (messageDeltaRef.value.msg === null) {
+      messageDeltaRef.value.msg = msg;
+    } else {
+      const preContent = messageDeltaRef.value.msg?.content;
+      messageDeltaRef.value.msg.content = preContent + msg.content;
+    }
+    console.log("push to message deltas success!");
+  }
+
+
+  if ("ASSISTANT" === msg.sendFrom && "ANSWER" === msg.type && "MESSAGE_COMPLETED" === msg.event) {
+    messageDeltaRef.value.done = true
+    messageDeltaRef.value.msg = null
+    messagesRef.value.msgs.push(msg);
+    isBackTop.value = false;
+    return;
+  }
+  if ("ASSISTANT" === msg.sendFrom && "FOLLOW_UP" === msg.type) {
+    followUpsRef.value.push(msg);
+    console.log("followUpsRef:" + JSON.stringify(followUpsRef.value))
+    return;
+  }
+
+  if ("ASSISTANT" === msg.sendFrom && "DONE" === msg.event) {
+    messageDeltaRef.value.done = true;
+    messageDeltaRef.value.msg = null
+  }
+
+  if ("ASSISTANT" === msg.sendFrom && "ERROR" === msg.event) {
+    messageDeltaRef.value.done = true;
+    messageDeltaRef.value.msg = null
+    proxy.$modal.msgError(msg.content);
+  }
+
+  //单聊
+  /*if (data.code == 1) {
+    for (let index = 0; index < assistantsRef.value.length; index++) {
+      const room = assistantsRef.value[index];
+      if (room.receiveId == data.fromUserId) {
+        assistantsRef.value[index].readNum++;
+      }
+    }
+    if (!selectUserOnline.value) {
+      return;
+    }
+    if (
+        selectUserOnline.value.receiveId == data.fromUserId ||
+        selectUserOnline.value.receiveId == data.toUserId
+    ) {
+      //这是撤回的逻辑
+      if (data.index != null) {
+        messageList.value[data.index].content = data.content;
+        messageList.value[data.index].isWithdraw = 1;
+        return;
+      }
+      messageList.value.push(data);
+      return;
+    }
+    return;
+  }*/
+}
+
 //初始化socket
 function init() {
   if (!user.value) {
@@ -709,81 +1076,42 @@ function init() {
   if (typeof WebSocket == "undefined") {
     console.log("您的浏览器不支持WebSocket");
   } else {
-    let socketUrl = websoketUrl.value + "/" + user.value.id + "/chat";
+    let socketUrl = websoketUrl.value + "/" + user.value.id + "/assistant";
     if (socket != null) {
       socket.close();
       socket = null;
     }
+    // todo
     // 开启一个websocket服务
     socket = new WebSocket(socketUrl);
-    //打开事件
-    socket.onopen = open();
-    //  浏览器端收消息，获得从服务端发送过来的文本消息
-    socket.onmessage = function (msg) {
-      console.log("收到数据====" + msg.data);
-      let data = JSON.parse(msg.data);
-
-      //群聊
-      if (data.code == 2) {
-        if (selectUserOnline.value) {
-          return;
-        }
-        // 这是撤回的逻辑
-        if (data.index != null) {
-          messageList.value[data.index].content = data.content;
-          messageList.value[data.index].isWithdraw = 1;
-          return;
-        }
-        messageList.value.push(data);
-        return;
-      }
-      //单聊
-      if (data.code == 1) {
-        for (let index = 0; index < roomList.value.length; index++) {
-          const room = roomList.value[index];
-          if (room.receiveId == data.fromUserId) {
-            roomList.value[index].readNum++;
-          }
-        }
-        if (!selectUserOnline.value) {
-          return;
-        }
-        if (
-          selectUserOnline.value.receiveId == data.fromUserId ||
-          selectUserOnline.value.receiveId == data.toUserId
-        ) {
-          //这是撤回的逻辑
-          if (data.index != null) {
-            messageList.value[data.index].content = data.content;
-            messageList.value[data.index].isWithdraw = 1;
-            return;
-          }
-          messageList.value.push(data);
-          return;
-        }
-        return;
-      }
-    };
-    //关闭事件
-    socket.onclose = function () {
-      console.log("websocket已关闭");
-    };
-    //发生了错误事件
-    socket.onerror = function () {
-      console.log("websocket发生了错误");
-    };
+    socket.addEventListener('open', () => {
+      console.log("websocket open success!");
+    });
+    socket.addEventListener('message', (event) => {
+      console.log("websocket msg:" + JSON.stringify(event));
+      handleWsMsg(event.data);
+    });
+    socket.addEventListener('close', (event) => {
+      console.log("websocket closed!");
+      handleWsMsg(event.data);
+    });
+    socket.addEventListener('error', (event) => {
+      console.log("websocket error!");
+      handleWsMsg(event.data);
+    });
   }
 }
 
 function open() {
   console.log("websocket已打开");
   //获取房间列表
+  /*
   getRoomList().then((res) => {
-    roomList.value.push(...res.data);
+    assistantsRef.value.push(...res.data);
   });
-
+*/
   //连接成功后获取历史聊天记录
-  doGetHistoryList();
+  // doGetHistoryList();
 }
 
 function messageScrollTop() {
@@ -791,6 +1119,7 @@ function messageScrollTop() {
     messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
   }, 500);
 }
+
 watch(visible, (newValue) => {
   if (newValue) {
     document.body.addEventListener("click", closeMenu);
@@ -799,8 +1128,17 @@ watch(visible, (newValue) => {
   }
 });
 
-watch(messageList, () => {
-  console.log(123);
+watch(messagesRef, () => {
+  if (isBackTop.value) {
+    messageContainer.scrollTop = 0;
+  } else {
+    nextTick(() => {
+      messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+    });
+  }
+}, {deep: true});
+
+watch(messageDeltaRef, () => {
   if (isBackTop.value) {
     messageContainer.scrollTop = 0;
     isBackTop.value = false;
@@ -809,11 +1147,36 @@ watch(messageList, () => {
       messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
     });
   }
-}, { deep: true });
+}, {deep: true});
+
+watch(followUpsRef, () => {
+  if (isBackTop.value) {
+    messageContainer.scrollTop = 0;
+    isBackTop.value = false;
+  } else {
+    nextTick(() => {
+      messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+    });
+  }
+}, {deep: true});
+
+//删除图片
+function imgDel(filename) {
+  // delBatchFile(filename[0].split(img)[1]);
+}
+
+//添加图片
+function imgAdd(pos, $file) {
+  var formdata = new FormData();
+  formdata.append("multipartFile", $file);
+  upload(formdata).then((res) => {
+    mdRef.value.$img2Url(pos, res.data);
+  });
+}
+
 
 init();
 </script>
-
 
 
 <style lang="scss" scoped>
@@ -920,6 +1283,7 @@ init();
           }
 
           .readNum {
+            text-align: center;
             margin-left: 10px;
             display: inline-block;
             background-color: #e63131;
@@ -930,7 +1294,7 @@ init();
 
             span {
               position: absolute;
-              left: -3px;
+              left: -8px;
               top: -3px;
             }
           }
@@ -973,7 +1337,7 @@ init();
     }
 
     .itemBox {
-        background-image: url("https://helloscala.cpolar.top/helloscala/asserts/20240505/imbg.png");
+      background-image: url("https://helloscala.cpolar.top/helloscala/asserts/20240505/imbg.png");
       background-color: #323644;
       width: 100%;
       box-shadow: none;
@@ -986,6 +1350,41 @@ init();
         font-size: 18px;
         color: var(--theme-color);
         border-bottom: 1px solid #666;
+      }
+
+      .conversationItem {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        background-color: #f9f9f9;
+        border: 1px solid #eaeaea;
+        margin-bottom: 10px;
+        padding: 10px;
+        line-height: 1.5;
+      }
+
+      .conversationItem .title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        flex-grow: 1; /* 让标题占据剩余空间 */
+      }
+
+      /* 调整文本显示 */
+      .conversationItem div {
+        font-size: 14px; /* 字体大小 */
+        color: #333; /* 字体颜色 */
+      }
+
+      /* 为不同的文本设置不同的样式 */
+      .conversationItem .summary {
+        font-weight: bold; /* 概要文本加粗 */
+      }
+
+      .conversationItem .lastSendTime,
+      .conversationItem .createTime {
+        font-size: 12px; /* 较小的字体大小 */
+        color: #666; /* 较浅的字体颜色 */
       }
 
       .messageBox,
@@ -1005,13 +1404,45 @@ init();
       }
 
       .messageBox {
+        .flex-row {
+          display: flex;
+          justify-content: center;
+          align-items: center; /* 垂直居中对齐 */
+        }
+
         height: 500px;
         overflow: auto;
         color: var(--text-color);
 
-        .more {
+        .custom-button {
           text-align: center;
-          margin-top: 10px;
+          /* 按钮之间的间距 */
+          margin: 10px 10px;
+          padding: 10px 20px; /* 按钮内边距 */
+          font-size: 16px; /* 字体大小 */
+          border-radius: 20px; /* 按钮边框圆角 */
+          color: white; /* 字体颜色 */
+        }
+
+        /* 可以为特定的按钮类型添加自定义颜色 */
+        .custom-button[type="success"] {
+          background-color: #67c23a; /* 成功按钮的颜色 */
+          border-color: #67c23a;
+        }
+
+        .custom-button[type="warning"] {
+          background-color: #e6a23c; /* 警告按钮的颜色 */
+          border-color: #e6a23c;
+        }
+
+        /* 按钮悬停效果 */
+        .custom-button:hover {
+          opacity: 0.9;
+        }
+
+        .start-session {
+          text-align: center;
+          margin: 0 10px; /* 给元素之间添加一些间距 */
           color: rgba(185, 183, 183, 0.898);
         }
 
@@ -1273,6 +1704,7 @@ init();
     }
   }
 }
+
 .el-icon {
   vertical-align: -2px;
 }

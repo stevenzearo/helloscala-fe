@@ -13,27 +13,27 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@tsparticles/slim": "^3.3.0",
+    "@tsparticles/slim": "^3.5.0",
     "@tsparticles/vue3": "^3.0.1",
     "materialize-css": "latest",
-    "tsparticles": "^3.3.0",
-    "vue": "^3.4.21"
+    "tsparticles": "^3.5.0",
+    "vue": "^3.4.34"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.3.3",
-    "@tsconfig/node20": "^20.1.2",
-    "@types/node": "^20.11.28",
-    "@vitejs/plugin-vue": "^5.0.4",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^20.14.13",
+    "@vitejs/plugin-vue": "^5.1.1",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/tsconfig": "^0.5.1",
-    "eslint": "^8.49.0",
-    "eslint-plugin-vue": "^9.17.0",
-    "npm-run-all2": "^6.1.2",
-    "prettier": "^3.0.3",
-    "typescript": "~5.4.0",
-    "vite": "^5.2.6",
-    "vue-tsc": "^2.0.6"
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "npm-run-all2": "^6.2.2",
+    "prettier": "^3.3.3",
+    "typescript": "~5.4.5",
+    "vite": "^5.3.5",
+    "vue-tsc": "^2.0.29"
   }
 }

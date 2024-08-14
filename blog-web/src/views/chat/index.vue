@@ -709,7 +709,7 @@ function init() {
   if (typeof WebSocket == "undefined") {
     console.log("您的浏览器不支持WebSocket");
   } else {
-    let socketUrl = websoketUrl.value + "?userId=" + user.value.id;
+    let socketUrl = websoketUrl.value + "/" + user.value.id + "/chat";
     if (socket != null) {
       socket.close();
       socket = null;

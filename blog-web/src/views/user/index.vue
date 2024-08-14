@@ -1096,7 +1096,7 @@ getCount();
         }
 
         &:hover {
-          .articleBtn {
+          & .articleBtn {
             display: block;
           }
 

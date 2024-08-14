@@ -1,4 +1,5 @@
 # helloscala-fe
+[项目介绍-中文](./README-CN.md)  
 Project for following websites:
 1. [www.helloscala.com](https://www.helloscala.com)
 2. [admin.helloscala.com](https://admin.helloscala.com)

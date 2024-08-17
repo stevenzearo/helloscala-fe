@@ -78,7 +78,7 @@
                 </div>
 
                 <span
-                    v-html="item.content"
+                    v-html="msgToHtml(item)"
                     class="messageContent"
                     @contextmenu.prevent="openMenu($event, item, index)"
                 >
@@ -114,7 +114,7 @@
                     <span class="noSelect">{{ user.nickname }}</span>
                   </div>
                   <div
-                      v-html="item.content"
+                      v-html="msgToHtml(item)"
                       class="nowMessageContent"
                       @contextmenu.prevent="openMenu($event, item, index)">
                   </div>
@@ -148,7 +148,7 @@
               </div>
 
               <span
-                  v-html="messageDeltaRef.msg?.content"
+                  v-html="msgToHtml(messageDeltaRef.msg)"
                   class="messageContent"
                   @contextmenu.prevent="openMenu($event, item, index)"
               >
@@ -176,7 +176,7 @@
         <!-- 输入框 -->
         <div class="bottom" v-show="showMsgRef">
           <!-- 输入选择 如表情、图片等 -->
-<!--          <div class="toolbars">
+          <div class="toolbars">
             <div>
               <span class="item hand-style" @click.stop="handleOpen">
                 <i class="iconfont icon-biaoqing"></i>
@@ -194,7 +194,7 @@
                 </span>
               </el-upload>
             </div>
-          </div>-->
+          </div>
           <!-- 表情框 -->
 <!--          <div class="emoji-wrapper" v-show="emojiShow">
             <Emoji @chooseEmoji="handleChooseEmoji"/>
@@ -336,10 +336,11 @@ import {useUserStore} from "@/store/moudel/user.js";
 import {useSiteStore} from "@/store/moudel/site.js";
 import {ElMessageBox} from "element-plus";
 import Clipboard, {copy} from "clipboard";
-import {chat, list, listConversationMsg, listConversations} from "@/api/assistant.js";
+import {chat, list, listConversationMsg, listConversations, uploadFile} from "@/api/assistant.js";
 import {removeToken} from "@/utils/cookie.js";
 import router from "@/router/index.js";
 import {editorToolbars} from "@/views/assistant/data.js";
+import {msgToHtml} from "@/views/assistant/helper.js";
 
 let socket;
 
@@ -461,11 +462,6 @@ function initAssistantSummary() {
 }
 
 initAssistantSummary()
-
-onBeforeUnmount(() => {
-  assistantStore.setSummaryList([])
-})
-
 const selectUserOnline = ref(null);
 const atMember = ref("");
 const searchUrl = ref([
@@ -581,11 +577,13 @@ function uploadSectionFile(param) {
     formData.append("multipartFile", files.value);
   }
 
-  upload(formData)
+  uploadFile(formData)
       .then((res) => {
+
         //上传之后发送消息
-        let content = `<img src="${res.data}" alt="" class="messageImg" style="width: 150px;height: 150px;">`;
-        chatWithAssistant(content, "IMAGE");
+        // let content = `<img src="${res.data.fileUrl}" alt="" class="messageImg" style="width: 150px;height: 150px;">`;
+        const objectContent = {type: "IMAGE", text: null, fileId: res.data.cozeId, fileUrl: res.data.fileUrl};
+        chatWithAssistant(JSON.stringify(objectContent), "IMAGE");
         imgDialogVisible.value = false;
       })
       .catch((error) => {
@@ -986,14 +984,6 @@ function handleWsMsg(msgStr) {
   if (msg.sendFrom === undefined || msg.sendFrom === null) {
     return;
   }
-  if ('OBJECT_STRING' === msg.contentType) {
-    const contentObj = JSON.parse(msg.content);
-    if ("text" === contentObj.type) {
-      msg.content = contentObj.content;
-    } else {
-      // todo get file
-    }
-  }
   if ("USER" === msg.sendFrom) {
     console.log("push user msg:" + JSON.stringify(msg));
     messagesRef.value.msgs.push(msg);
@@ -1148,8 +1138,9 @@ function imgDel(filename) {
 function imgAdd(pos, $file) {
   var formdata = new FormData();
   formdata.append("multipartFile", $file);
-  upload(formdata).then((res) => {
-    mdRef.value.$img2Url(pos, res.data);
+  uploadFile(formdata).then((res) => {
+    console.log("uploadFile res:" + JSON.stringify(res))
+    mdRef.value.$img2Url(pos, res.data.fileUrl);
   });
 }
 </script>

@@ -38,12 +38,12 @@ export function chat(id, conversationId, msg) {
     })
 }
 
-export function uploadFile(file) {
+export function uploadFile(fileData) {
     return request({
         url: '/bot-assistant/file',
         method: 'post',
-        headers: {'Content-Type': 'multipart/articles-data'},
-        data: {multipartFile: file}
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: fileData
     })
 }
 
